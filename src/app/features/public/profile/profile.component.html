@@ -1,0 +1,131 @@
+<section class="profile-header mat-elevation-z2" *ngIf="data() as vm">
+  <div class="avatar-wrap">
+    <img [src]="vm.avatar" [alt]="vm.name" class="avatar" title="name" />
+  </div>
+
+  <div class="intro">
+    <h1>{{ vm.name }}</h1>
+    <h2>{{ vm.title }}</h2>
+    <p>{{ vm.intro }}</p>
+
+    <div class="cta-row">
+      <ng-container *ngFor="let c of vm.ctas">
+        <ng-container [ngSwitch]="c.variant">
+          <a
+            *ngSwitchCase="'flat'"
+            mat-flat-button
+            color="primary"
+            [routerLink]="c.link"
+          >
+            <mat-icon>{{ c.icon }}</mat-icon> {{ c.label }}
+          </a>
+          <a
+            *ngSwitchCase="'stroked'"
+            mat-stroked-button
+            color="primary"
+            [routerLink]="c.link"
+          >
+            <mat-icon>{{ c.icon }}</mat-icon> {{ c.label }}
+          </a>
+          <a *ngSwitchDefault mat-button [routerLink]="c.link">
+            <mat-icon>{{ c.icon }}</mat-icon> {{ c.label }}
+          </a>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+</section>
+
+<!-- ✅ ADDED: Professional Journey (simple timeline) -->
+<section class="journey">
+  <h2>Professional Journey</h2>
+  <ul class="timeline">
+    <li>
+      <span class="year">2015 → 2023</span>
+      <strong>iSolve (South Africa)</strong>
+      <p>
+        Modernised claims/member portals with Angular + .NET. Built reusable
+        components and microservices for national clients.
+      </p>
+    </li>
+    <li>
+      <span class="year">2023 → 2025</span>
+      <strong>NZX Wealth Technologies</strong>
+      <p>
+        Enterprise Angular.JS with .NET Core & Blazor. CI/CD pipelines and
+        component libraries.
+      </p>
+    </li>
+    <li>
+      <span class="year">2025 → Current</span>
+      <strong>Manage My Health (Auckland)</strong>
+      <p>
+        Hybrid Ionic + Angular + .NET. API/SQL optimisation and platform
+        reliability.
+      </p>
+    </li>
+  </ul>
+</section>
+
+<section class="values" *ngIf="data()?.values as values">
+  <h2>Core Values</h2>
+  <div class="value-grid">
+    <mat-card *ngFor="let v of values; trackBy: trackByTitle">
+      <mat-card-header>
+        <mat-icon>{{ v.icon }}</mat-icon>
+        <mat-card-title>{{ v.title }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{ v.description }}</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</section>
+
+<!-- NEW, polished skills -->
+<section class="skills" *ngIf="data()?.skills as skills">
+  <h2>Technical Focus</h2>
+
+  <ul class="skill-grid" role="list">
+    <li *ngFor="let s of skills; trackBy: trackByText" role="listitem">
+      <button type="button" class="skill" matRipple>
+        <span class="icon"
+          ><mat-icon>{{ s.icon }}</mat-icon></span
+        >
+        <span class="label">{{ s.text }}</span>
+      </button>
+    </li>
+  </ul>
+</section>
+
+<!-- ✅ ADDED: Personal Note -->
+<section class="personal-note">
+  <h3>Beyond Code</h3>
+  <p>
+    Outside of engineering, I like to stay fit and healthy, focus and
+    resilience — the same discipline I bring to building maintainable systems
+    with clear architecture.
+  </p>
+</section>
+
+<!-- facts + footer unchanged -->
+<section class="facts" *ngIf="data()?.facts as facts">
+  <h3>Quick Facts</h3>
+  <mat-card class="facts-card">
+    <mat-card-content>
+      <ul>
+        <li *ngFor="let f of facts; trackBy: trackByLabel">
+          <mat-icon>{{ f.icon || "info" }}</mat-icon>
+          <strong>{{ f.label }}:</strong>
+          <span>{{ f.value }}</span>
+        </li>
+      </ul>
+    </mat-card-content>
+  </mat-card>
+</section>
+
+<footer class="profile-footer">
+  <a mat-button routerLink="/portfolio/architecture">
+    <mat-icon>architecture</mat-icon> View Application Architecture
+  </a>
+</footer>

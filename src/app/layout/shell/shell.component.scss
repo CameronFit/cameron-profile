@@ -1,0 +1,59 @@
+/* Top bar */
+.app-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  height: var(--topbar-height);
+  background: var(--topbar-bg);
+  color: var(--text);
+  .spacer { flex: 1; }
+}
+
+/* Container */
+.app-container {
+  height: calc(100vh - var(--topbar-height));
+  background: var(--surface-bg);
+}
+
+/* Straight edges on the drawer */
+.app-sidenav {
+  background: var(--sidenav-bg);
+  border-right: 1px solid var(--border-weak);
+  box-shadow: var(--shadow-1);
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+/* Page area */
+.app-content {
+  padding: var(--page-pad);
+  min-height: 100%;
+  color: var(--text);
+}
+
+/* --- The important part: control BOTH widths and content offset --- */
+/* Default (expanded) */
+.app-container .mat-drawer {
+  width: var(--nav-width);                 /* e.g. 260px */
+  min-width: var(--nav-width);
+  max-width: var(--nav-width);
+}
+.app-container .mat-drawer-content {
+  margin-left: var(--nav-width);
+}
+
+/* Collapsed */
+.app-container.collapsed .mat-drawer {
+  width: var(--nav-width-collapsed);       /* e.g. 72px */
+  min-width: var(--nav-width-collapsed);
+  max-width: var(--nav-width-collapsed);
+}
+.app-container.collapsed .mat-drawer-content {
+  margin-left: var(--nav-width-collapsed);
+}
+
+/* Make it feel nice */
+.app-container .mat-drawer,
+.app-container .mat-drawer-content {
+  transition: margin 250ms ease, width 250ms ease;
+}

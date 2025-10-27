@@ -1,0 +1,63 @@
+:host { display:block; color: var(--text); }
+
+.home-container {
+  max-width: 1100px;
+  margin: clamp(12px, 3vw, 24px) auto;
+  padding: 0 clamp(12px, 3vw, 24px);
+  display: grid;
+  gap: clamp(12px, 2.5vw, 20px);
+}
+
+/* Card base styles use global tokens */
+.intro-card,
+.purpose-card {
+  background: var(--surface-2);
+  border: 1px solid var(--border-weak);
+  border-radius: var(--radius-lg);
+  padding: clamp(16px, 2.5vw, 22px);
+}
+
+.intro-card {
+  h1 { margin: 0 0 8px; font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 800; }
+  .lead { color: var(--text-dim); margin: 0 0 14px; line-height: 1.55; }
+
+  .cta-row {
+    display: flex; gap: 10px; flex-wrap: wrap;
+    button mat-icon { margin-right: 6px; } /* buttons now, not anchors */
+  }
+}
+
+/* Subtle ‘glass’ accent using tokens */
+.purpose-card.glass {
+  background:
+    radial-gradient(800px 400px at 10% -20%, color-mix(in oklab, var(--accent) 15%, transparent), transparent 60%),
+    var(--surface-2);
+  border-color: color-mix(in oklab, var(--accent) 35%, var(--border-weak));
+  box-shadow: var(--shadow-2);
+  h2 { margin: 0 0 8px; font-size: clamp(1.2rem, 2vw, 1.6rem); }
+  p { margin: 6px 0; color: var(--text); opacity: .92; line-height: 1.55; }
+}
+
+/* Highlights grid: small black cards */
+.highlights {
+  h3 { text-align: center; margin: 0 0 10px; font-size: clamp(1.1rem, 1.8vw, 1.4rem); }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+  }
+  .highlight {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 12px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border-weak);
+    border-radius: var(--radius-md);
+    transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+    mat-icon { color: var(--accent); }
+    &:hover { transform: translateY(-3px); box-shadow: var(--shadow-3); border-color: color-mix(in oklab, var(--accent) 40%, var(--border-weak)); }
+  }
+}
+
+.home-footer {
+  margin: 18px 0 6px; text-align: center; color: var(--text-dim); font-size: .9rem;
+}

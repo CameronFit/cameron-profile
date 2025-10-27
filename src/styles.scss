@@ -1,0 +1,53 @@
+/* Global Styles (senior-standard)
+   - Central tokens + Material theme import
+   - Baseline resets and dark-surface defaults
+*/
+@use "./styles/tokens" as *;
+@use "./styles/theme" as *;
+
+@import "gridstack/dist/gridstack.min.css";
+
+/* Reset-ish */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  background: var(--surface-bg);
+  color: var(--text);
+  font-family: Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar (subtle, dark) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-weak) transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--border-weak);
+  border-radius: 8px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Utility layout vars */
+:root {
+  --page-pad: clamp(16px, 2vw, 24px);
+}
+
+/* Material density override example (optional per-app) */
+/* .dense .mdc-list-item__primary-text { letter-spacing: .2px; } */

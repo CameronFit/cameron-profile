@@ -1,0 +1,88 @@
+<section class="dash">
+  <header class="dash__header">
+    <div>
+      <h1>Dashboard</h1>
+      <p class="muted">Welcome back, Cameron. Here’s a quick snapshot.</p>
+    </div>
+    <div class="actions">
+      <button mat-stroked-button (click)="reload()">
+        <mat-icon>refresh</mat-icon>
+        Refresh
+      </button>
+    </div>
+  </header>
+
+  <!-- Quick stats -->
+  <div class="stats">
+    <mat-card class="stat">
+      <div class="stat__icon"><mat-icon>work</mat-icon></div>
+      <div class="stat__meta">
+        <h2>{{ stats()?.projects ?? "—" }}</h2>
+        <p class="muted">Projects</p>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat">
+      <div class="stat__icon"><mat-icon>bolt</mat-icon></div>
+      <div class="stat__meta">
+        <h2>{{ stats()?.skills ?? "—" }}</h2>
+        <p class="muted">Core Skills</p>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat">
+      <div class="stat__icon"><mat-icon>visibility</mat-icon></div>
+      <div class="stat__meta">
+        <h2>{{ stats()?.views ?? "—" }}</h2>
+        <p class="muted">Profile Views</p>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat">
+      <div class="stat__icon"><mat-icon>schedule</mat-icon></div>
+      <div class="stat__meta">
+        <h2>{{ stats()?.lastUpdated ?? "—" }}</h2>
+        <p class="muted">Last Updated</p>
+      </div>
+    </mat-card>
+  </div>
+
+  <!-- Two-column content -->
+  <div class="grid">
+    <mat-card class="panel">
+      <h3 class="panel__title"><mat-icon>history</mat-icon> Recent Activity</h3>
+      <div *ngIf="!recent()?.length && !loading()">No recent items yet.</div>
+      <ul class="timeline">
+        <li *ngFor="let item of recent()">
+          <span class="dot"></span>
+          <div class="entry">
+            <strong>{{ item.title }}</strong>
+            <p class="muted">{{ item.time }}</p>
+          </div>
+        </li>
+      </ul>
+    </mat-card>
+
+    <mat-card class="panel">
+      <h3 class="panel__title">
+        <mat-icon>tips_and_updates</mat-icon> Quick Actions
+      </h3>
+      <div class="actions-col">
+        <button mat-raised-button color="primary" routerLink="/projects">
+          <mat-icon>add_circle</mat-icon> Add Showcase Project
+        </button>
+        <button mat-stroked-button routerLink="/resume">
+          <mat-icon>description</mat-icon> Update Resume Links
+        </button>
+        <button mat-stroked-button routerLink="/skills">
+          <mat-icon>bolt</mat-icon> Edit Skills
+        </button>
+      </div>
+    </mat-card>
+  </div>
+
+  <mat-card *ngIf="loading()" class="loading">
+    <mat-icon>hourglass_top</mat-icon>
+    <span>Loading…</span>
+  </mat-card>
+</section>

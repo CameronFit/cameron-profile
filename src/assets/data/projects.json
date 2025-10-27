@@ -1,0 +1,19 @@
+[
+  {
+    "id": "architecture-showcase",
+    "title": "Architecture Showcase",
+    "summary": "Signals, DI tokens, guards, interceptors, APP_INITIALIZER, mock protected API.",
+    "tech": ["Angular", "Signals", "Material", "RxJS"],
+    "links": { "demo": "/architecture" },
+    "featured": true,
+    "date": "2025-10-24"
+  },
+  {
+    "id": "cameron-profile",
+    "title": "Cameron Profile App",
+    "summary": "Portfolio SPA with widget-ready shell, PDF viewers, centralized content service.",
+    "tech": ["Angular", "Material", "SCSS"],
+    "links": { "repo": "https://github.com/your/repo" },
+    "date": "2025-10-23"
+  }
+]

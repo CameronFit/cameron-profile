@@ -1,0 +1,26 @@
+<mat-toolbar class="app-toolbar mat-elevation-z3">
+  <button mat-icon-button (click)="toggle()" aria-label="Toggle navigation">
+    <mat-icon>{{ collapsed() ? 'menu_open' : 'menu' }}</mat-icon>
+  </button>
+  <span class="spacer"></span>
+</mat-toolbar>
+
+<!-- Bind the collapsed state as a class -->
+<mat-sidenav-container
+  class="app-container"
+  [class.collapsed]="collapsed()"
+  autosize
+>
+  <mat-sidenav
+    class="app-sidenav"
+    mode="side"
+    position="start"
+    [opened]="true"
+  >
+    <app-custom-sidenav [collapsed]="collapsed()"></app-custom-sidenav>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="app-content">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

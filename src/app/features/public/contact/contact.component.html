@@ -1,0 +1,102 @@
+<section class="contact">
+  <!-- Header / Intro -->
+  <header class="intro card">
+    <div class="left">
+      <h1>Contact</h1>
+      <p class="hint">
+        Quick ways to reach me and a short form that opens your email client with the details pre-filled.
+      </p>
+    </div>
+    <div class="actions">
+      <a mat-stroked-button [href]="'mailto:' + email">
+        <mat-icon>mail</mat-icon>
+        Email
+      </a>
+      <a mat-stroked-button [href]="linkedIn" target="_blank" rel="noopener">
+        <mat-icon>public</mat-icon>
+        LinkedIn
+      </a>
+      <button mat-stroked-button (click)="downloadResume()">
+        <mat-icon>description</mat-icon>
+        Résumé
+      </button>
+      <button mat-stroked-button (click)="downloadCover()">
+        <mat-icon>drafts</mat-icon>
+        Cover Letter
+      </button>
+    </div>
+  </header>
+
+  <!-- Two-column layout: cards + form -->
+  <div class="grid">
+    <!-- Contact cards -->
+    <mat-card class="card info">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>person</mat-icon>
+        <mat-card-title>Direct</mat-card-title>
+        <mat-card-subtitle>Preferred contact</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>
+          <strong>Email:</strong>
+          <a [href]="'mailto:' + email">{{ email }}</a>
+        </p>
+        <p>
+          <strong>LinkedIn:</strong>
+          <a [href]="linkedIn" target="_blank" rel="noopener">/cameron-young-nz</a>
+        </p>
+        <p class="muted">I reply within 24 hours (NZT).</p>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Form -->
+    <mat-card class="card form">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>edit</mat-icon>
+        <mat-card-title>Send a message</mat-card-title>
+        <mat-card-subtitle>Opens your email client</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="openMailClient()" class="form-grid" autocomplete="on">
+          <mat-form-field appearance="outline">
+            <mat-label>Your name</mat-label>
+            <input matInput formControlName="name" placeholder="Jane Doe" />
+            <mat-error *ngIf="form.controls.name.hasError('required')">Name is required</mat-error>
+            <mat-error *ngIf="form.controls.name.hasError('minlength')">Min 2 characters</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Your email</mat-label>
+            <input matInput formControlName="email" type="email" placeholder="you@example.com" />
+            <mat-error *ngIf="form.controls.email.hasError('required')">Email is required</mat-error>
+            <mat-error *ngIf="form.controls.email.hasError('email')">Enter a valid email</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="subject">
+            <mat-label>Subject</mat-label>
+            <input matInput formControlName="subject" placeholder="Opportunity at TAP" />
+            <mat-error *ngIf="form.controls.subject.hasError('required')">Subject is required</mat-error>
+            <mat-error *ngIf="form.controls.subject.hasError('minlength')">Min 3 characters</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="message">
+            <mat-label>Message</mat-label>
+            <textarea matInput formControlName="message" rows="6" placeholder="Hi Cameron…"></textarea>
+            <mat-error *ngIf="form.controls.message.hasError('required')">Message is required</mat-error>
+            <mat-error *ngIf="form.controls.message.hasError('minlength')">Min 10 characters</mat-error>
+          </mat-form-field>
+
+          <div class="form-actions">
+            <button mat-flat-button color="primary" type="submit" [disabled]="disabled()">
+              <mat-icon *ngIf="!sending()">send</mat-icon>
+              <mat-icon *ngIf="sending()">hourglass_empty</mat-icon>
+              {{ sending() ? 'Opening…' : 'Send' }}
+            </button>
+            <button mat-button type="button" (click)="form.reset()">Clear</button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</section>

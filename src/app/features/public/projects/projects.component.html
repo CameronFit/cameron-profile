@@ -1,0 +1,96 @@
+<!-- src/app/features/projects/projects.component.html -->
+<header class="projects-header">
+  <div class="left">
+    <h1>Projects</h1>
+    <p class="hint">Signal-driven list with search and tech filters.</p>
+  </div>
+
+  <div class="controls">
+    <mat-form-field appearance="outline" class="search">
+      <mat-label>Search projects</mat-label>
+      <input
+        matInput
+        [formControl]="search"
+        placeholder="Title, summary, or tech…"
+      />
+      <button
+        mat-icon-button
+        matSuffix
+        *ngIf="search.value"
+        (click)="search.setValue('')"
+        aria-label="Clear"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <button mat-stroked-button (click)="clearFilters()">Clear</button>
+  </div>
+</header>
+
+<section class="tech-filter" *ngIf="techPool().length">
+  <span class="label">Filter by tech:</span>
+
+  <!-- Selectable chips must use chip-listbox + chip-option -->
+  <mat-chip-listbox
+    [multiple]="true"
+    class="tech-chip-list"
+    aria-label="Filter projects by technology"
+  >
+    <mat-chip-option
+      *ngFor="let t of techPool()"
+      [selected]="selectedTech().has(t)"
+      (selectionChange)="onTechSelectionChange(t, $event.selected)"
+      class="chip"
+    >
+      {{ t }}
+    </mat-chip-option>
+  </mat-chip-listbox>
+</section>
+
+<section class="project-grid">
+  <mat-card class="project" *ngFor="let p of filtered(); trackBy: trackById">
+    <div class="head">
+      <h3>{{ p.title }}</h3>
+
+      <!-- Non-interactive chips are fine with chip-set + chip -->
+      <mat-chip-set>
+        <mat-chip *ngFor="let t of p.tech">{{ t }}</mat-chip>
+      </mat-chip-set>
+    </div>
+
+    <p class="summary">{{ p.summary }}</p>
+
+    <div class="links">
+      <a
+        *ngIf="p.links?.demo"
+        mat-stroked-button
+        href="{{ p.links?.demo }}"
+        target="_blank"
+        rel="noopener"
+      >
+        <mat-icon>play_circle</mat-icon>
+        Live Demo
+      </a>
+      <a
+        *ngIf="p.links?.repo"
+        mat-button
+        href="{{ p.links?.repo }}"
+        target="_blank"
+        rel="noopener"
+      >
+        <mat-icon>code</mat-icon>
+        Source
+      </a>
+      <a *ngIf="!p.links?.demo && !p.links?.repo" mat-button disabled>
+        <mat-icon>info</mat-icon>
+        Details coming soon
+      </a>
+    </div>
+  </mat-card>
+</section>
+
+<section class="empty" *ngIf="filtered().length === 0">
+  <mat-icon>search_off</mat-icon>
+  <p>No projects match your filters.</p>
+</section>

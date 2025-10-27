@@ -1,0 +1,41 @@
+{
+  "intro": {
+    "title": "Hi, I’m Cameron Young",
+    "subtitle": "An Angular front-end developer who loves building scalable, production-grade apps. Explore my online résumé by seeing my thinking and code in action inside this application.",
+    "ctas": [
+      {
+        "label": "View Résumé",
+        "icon": "description",
+        "link": "/portfolio/resume",
+        "variant": "stroked"
+      },
+      {
+        "label": "Architecture",
+        "icon": "architecture",
+        "link": "/architecture",
+        "variant": "flat"
+      }
+    ]
+  },
+  "purpose": {
+    "title": "Why this site exists",
+    "paragraphs": [
+      "This isn’t just a résumé — it’s a working Angular 18 app that shows how I build: signals for state, typed forms, clean services, dependency injection with InjectionTokens, RxJS for orchestration, and secure auth via interceptors/guards.",
+      "Inside you’ll explore my profile (who I am), projects (problems solved), and the architecture that powers this site — visible, testable, and production-minded."
+    ]
+  },
+  "highlights": [
+    { "icon": "bolt", "label": "Angular 18 (standalone)" },
+    { "icon": "device_hub", "label": "Signals state management" },
+    { "icon": "sync_alt", "label": "RxJS orchestration" },
+    { "icon": "hub", "label": "Services + DI" },
+    { "icon": "vpn_key", "label": "InjectionTokens" },
+    { "icon": "verified_user", "label": "Auth interceptor + refresh" },
+    { "icon": "admin_panel_settings", "label": "Route guards" },
+    { "icon": "rule", "label": "Typed Forms" },
+    { "icon": "architecture", "label": "APP_INITIALIZER boot flow" },
+    { "icon": "palette", "label": "Material M3 + design tokens" },
+    { "icon": "bug_report", "label": "Central error handling" },
+    { "icon": "hourglass_empty", "label": "Global loading signal" }
+  ]
+}

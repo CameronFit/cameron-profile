@@ -1,0 +1,195 @@
+<!-- HERO -->
+<section class="arch-hero">
+  <div class="hero-body">
+    <h1>Application Architecture</h1>
+    <p class="lead">
+      Standalone components • Signals • Interceptors • Guards • InjectionTokens. Designed for scale, testability, and clarity with Material M3 + design tokens.
+    </p>
+
+    <ul class="hero-badges">
+      <li *ngFor="let b of badges(); trackBy: trackByText">
+        <mat-icon>{{ b.icon }}</mat-icon><span>{{ b.text }}</span>
+      </li>
+    </ul>
+
+    <div class="hero-cta">
+      <a mat-flat-button color="primary" routerLink="/playground">
+        <mat-icon>psychology</mat-icon> Explore Patterns
+      </a>
+      <a mat-stroked-button color="primary" routerLink="/resume">
+        <mat-icon>description</mat-icon> View Résumé
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ACCORDION -->
+<mat-accordion class="arch-accordion" multi>
+
+  <!-- Contents -->
+  <mat-expansion-panel #pCONTENTS="matExpansionPanel" id="contents" class="panel p-contents" [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title><mat-icon>menu_book</mat-icon> Contents</mat-panel-title>
+      <mat-panel-description>Quick jump</mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <nav class="contents-grid" role="navigation" aria-label="Architecture sections">
+      <!-- Use buttons (not <a href="#">) to avoid router/hash side-effects -->
+      <button type="button" class="contents-link" (click)="jump(pWW,'ww',$event)"><mat-icon>lightbulb</mat-icon><span>What & Why</span></button>
+      <button type="button" class="contents-link" (click)="jump(pDIAGRAM,'diagram',$event)"><mat-icon>schema</mat-icon><span>Architecture Diagram</span></button>
+      <button type="button" class="contents-link" (click)="jump(pFFL,'ffl',$event)"><mat-icon>folder</mat-icon><span>Feature-First Layout</span></button>
+      <button type="button" class="contents-link" (click)="jump(pAG,'ag',$event)"><mat-icon>admin_panel_settings</mat-icon><span>Auth Guard</span></button>
+      <button type="button" class="contents-link" (click)="jump(pINTC,'intc',$event)"><mat-icon>sync_lock</mat-icon><span>Interceptors</span></button>
+      <button type="button" class="contents-link" (click)="jump(pTOK,'tokens',$event)"><mat-icon>extension</mat-icon><span>InjectionTokens</span></button>
+      <button type="button" class="contents-link" (click)="jump(pSIG,'signals',$event)"><mat-icon>bolt</mat-icon><span>Signals vs BS</span></button>
+      <button type="button" class="contents-link" (click)="jump(pROUT,'routing',$event)"><mat-icon>alt_route</mat-icon><span>Routing</span></button>
+      <button type="button" class="contents-link" (click)="jump(pTEST,'testing',$event)"><mat-icon>fact_check</mat-icon><span>Testing</span></button>
+    </nav>
+  </mat-expansion-panel>
+
+  <!-- What & Why -->
+  <mat-expansion-panel #pWW="matExpansionPanel" id="ww" class="panel p-why">
+    <mat-expansion-panel-header>
+      <mat-panel-title><mat-icon>lightbulb</mat-icon> What & Why</mat-panel-title>
+      <mat-panel-description>Principles that guide the app</mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <div class="cards" *ngIf="whatWhy()?.length; else noWhatWhy">
+      <article class="card" *ngFor="let item of whatWhy(); trackBy: trackByTitle">
+        <h3>{{ item.title }}</h3>
+        <p>{{ item.body }}</p>
+      </article>
+    </div>
+    <ng-template #noWhatWhy><p class="muted">— No items yet (loaded from PortfolioContentService) —</p></ng-template>
+  </mat-expansion-panel>
+
+  <!-- Diagram -->
+  <mat-expansion-panel #pDIAGRAM="matExpansionPanel" id="diagram" class="panel p-diagram">
+    <mat-expansion-panel-header>
+      <mat-panel-title><mat-icon>schema</mat-icon> Architecture Diagram</mat-panel-title>
+      <mat-panel-description>Signals in, interceptors around, guards at gates</mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <pre class="mono">
+ShellComponent
+ ├─ Topbar (signals: loading)
+ ├─ Sidenav (signals: collapsed)
+ └─ RouterOutlet
+     ├─ Public Features (Home, Profile, Projects)
+     └─ Admin Feature (guarded)
+         └─ Widgets (role-aware, lazy data)
+
+Core (cross-cutting)
+ ├─ auth.interceptor.ts    → attach token, 401 refresh + replay
+ ├─ error.interceptor.ts   → map errors to UX-safe toasts
+ ├─ loading.interceptor.ts → global loading signal
+ ├─ auth.guard.ts (canMatch) → gate admin routes
+ └─ tokens.ts → AUTH_STATE, APP_CONFIG
+    </pre>
+  </mat-expansion-panel>
+
+  <!-- Feature-First Layout -->
+  <mat-expansion-panel #pFFL="matExpansionPanel" id="ffl" class="panel p-ffl">
+    <mat-expansion-panel-header>
+      <mat-panel-title><mat-icon>folder</mat-icon> Feature-First Layout</mat-panel-title>
+      <mat-panel-description>Boundaries & ownership</mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <p class="muted">Each feature owns its UI + logic. Core = cross-cutting only.</p>
+
+    <mat-list class="folder-list" *ngIf="folders()?.length; else noFolders">
+      <mat-list-item *ngFor="let f of folders(); trackBy: trackByPath">
+        <mat-icon matListItemIcon>folder</mat-icon>
+        <div matListItemTitle><code>{{ f.path }}</code></div>
+        <div matListItemLine>{{ f.why }}</div>
+      </mat-list-item>
+    </mat-list>
+    <ng-template #noFolders><p class="muted">— No folders listed (from PortfolioContentService) —</p></ng-template>
+
+    <pre class="mono tree">
+src/
+ ├─ core/         # interceptors, guards, tokens, services
+ ├─ shared/       # presentational CVA controls, pipes
+ ├─ features/
+ │   ├─ public/   # home, profile, projects
+ │   └─ admin/    # guarded area (role-aware widgets)
+ └─ app-shell/    # shell layout (topbar/sidenav)
+    </pre>
+  </mat-expansion-panel>
+
+  <!-- Guard -->
+  <mat-expansion-panel #pAG="matExpansionPanel" id="ag" class="panel p-guard">
+    <mat-expansion-panel-header>
+      <mat-panel-title><mat-icon>admin_panel_settings</mat-icon> Auth Guard</mat-panel-title>
+      <mat-panel-description>canMatch + signals</mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <pre class="mono"><code>{{ snippets.guard || '—' }}</code></pre>
+  </mat-expansion-panel>
+
+  <!-- Interceptors -->
+  <mat-expansion-panel #pINTC="matExpansionPanel" id="intc" class="panel p-interceptors">
+    <mat-expansion-panel-header>
+      <mat-panel-title><mat-icon>sync_lock</mat-icon> Interceptors</mat-panel-title>
+      <mat-panel-description>Auth • Loading • Errors</mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <ng-container *ngFor="let key of snippetKeys">
+      <h4 class="snippet-title">{{ key }}</h4>
+      <pre class="mono"><code>{{ snippets[key] || '—' }}</code></pre>
+    </ng-container>
+  </mat-expansion-panel>
+
+  <!-- InjectionTokens -->
+  <mat-expansion-panel #pTOK="matExpansionPanel" id="tokens" class="panel p-tokens">
+    <mat-expansion-panel-header>
+      <mat-panel-title><mat-icon>extension</mat-icon> InjectionTokens</mat-panel-title>
+      <mat-panel-description>Pluggable & mockable</mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <h4 class="snippet-title">AUTH_STATE</h4>
+    <pre class="mono"><code>{{ snippets.authState || '—' }}</code></pre>
+  </mat-expansion-panel>
+
+  <!-- Signals vs BehaviorSubject -->
+  <mat-expansion-panel #pSIG="matExpansionPanel" id="signals" class="panel p-signals">
+    <mat-expansion-panel-header>
+      <mat-panel-title><mat-icon>bolt</mat-icon> Signals vs BehaviorSubject</mat-panel-title>
+      <mat-panel-description>Lean UI/session state</mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <pre class="mono"><code>{{ snippets.signalsVsBs || '—' }}</code></pre>
+  </mat-expansion-panel>
+
+  <!-- Routing -->
+  <mat-expansion-panel #pROUT="matExpansionPanel" id="routing" class="panel p-routing">
+    <mat-expansion-panel-header>
+      <mat-panel-title><mat-icon>alt_route</mat-icon> Routing Strategy</mat-panel-title>
+      <mat-panel-description>Lazy features, guarded admin</mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <pre class="mono"><code>{{ snippets.routes || '—' }}</code></pre>
+  </mat-expansion-panel>
+
+  <!-- Testing -->
+  <mat-expansion-panel #pTEST="matExpansionPanel" id="testing" class="panel p-testing">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <mat-icon>fact_check</mat-icon> Testing Notes</mat-panel-title>
+      <mat-panel-description>Unit + integration</mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <ul class="bullets">
+      <li>Mock InjectionTokens (e.g., AUTH_STATE) per test.</li>
+      <li>canMatch: assert true/false by toggling auth signal.</li>
+      <li>HttpClientTestingModule for interceptors (+ flush 401/200).</li>
+      <li>Signals make computed state sync and easy to assert.</li>
+    </ul>
+  </mat-expansion-panel>
+</mat-accordion>
+
+<footer class="arch-footer">
+  <a mat-button routerLink="/projects"><mat-icon>terminal</mat-icon> See Patterns in Projects</a>
+  <span class="dot">•</span>
+  <a mat-button routerLink="/admin"><mat-icon>admin_panel_settings</mat-icon> Visit Guarded Admin (Demo)</a>
+</footer>

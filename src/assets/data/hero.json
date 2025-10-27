@@ -1,0 +1,8 @@
+{
+  "title": "Cameron Young — Angular Front-End Engineer",
+  "subtitle": "Signals • Material • DI • Guards • Interceptors",
+  "ctas": [
+    { "label": "Architecture", "link": "/architecture" },
+    { "label": "Projects", "link": "/projects" }
+  ]
+}

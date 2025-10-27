@@ -1,0 +1,35 @@
+<div class="sidenav-header">
+  <img
+    class="avatar"
+    [width]="profilePicSize()"
+    [height]="profilePicSize()"
+    src="/assets/cam-profile.jpeg"
+    alt="Profile picture"
+  />
+  <div class="header-text" [class.hide]="sideNavCollapsed()">
+    <h2>Your Channel</h2>
+    <p>Cameron Young</p>
+  </div>
+</div>
+
+<mat-nav-list class="nav-list">
+  <a
+    mat-list-item
+    *ngFor="let item of menuItems()"
+    [routerLink]="item.route"
+    routerLinkActive="is-active"
+    #rla="routerLinkActive"
+  >
+    <!-- ✅ exactly ONE icon slot -->
+    <mat-icon
+      matListItemIcon
+      class="material-symbols-outlined"
+      [class.filled]="rla.isActive"
+    >
+      {{ item.icon }}
+    </mat-icon>
+
+    <!-- ✅ exactly ONE title slot -->
+    <span matListItemTitle *ngIf="!sideNavCollapsed()">{{ item.label }}</span>
+  </a>
+</mat-nav-list>

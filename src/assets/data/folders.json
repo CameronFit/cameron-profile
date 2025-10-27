@@ -1,0 +1,26 @@
+[
+  {
+    "path": "src/app/core",
+    "why": "Cross-cutting concerns: tokens, interceptors, guards, services, utils."
+  },
+  {
+    "path": "src/app/shared",
+    "why": "Reusable UI primitives (pure components, pipes, directives)."
+  },
+  {
+    "path": "src/app/features",
+    "why": "Feature-first boundaries; each feature owns routes, UI, and services."
+  },
+  {
+    "path": "src/app/features/public",
+    "why": "Public routes (Home, Profile, Projects, Skills, Timeline, Resume, Cover Letter, Architecture, Playground)."
+  },
+  {
+    "path": "src/app/features/admin",
+    "why": "Demo admin routes gated by guards; shows role-aware UI and auth flow."
+  },
+  {
+    "path": "src/styles",
+    "why": "Design tokens + Material M3 theme + app-wide SCSS."
+  }
+]

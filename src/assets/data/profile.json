@@ -1,0 +1,64 @@
+{
+  "name": "Cameron Young",
+  "title": "Front-End Angular Engineer",
+  "intro": "I’m an Angular-focused front-end developer with a passion for clean architecture and polished UX. I build scalable, testable apps using modern Angular patterns: standalone components, signals, typed forms, and Material M3.",
+  "avatar": "/assets/cam-profile.jpeg",
+  "ctas": [
+    {
+      "label": "View Résumé",
+      "icon": "description",
+      "link": "/portfolio/resume",
+      "variant": "stroked"
+    }
+  ],
+  "values": [
+    {
+      "icon": "architecture",
+      "title": "Craftsmanship",
+      "description": "Elegant, testable, maintainable code."
+    },
+    {
+      "icon": "track_changes",
+      "title": "Clarity",
+      "description": "Readable solutions that scale with teams."
+    },
+    {
+      "icon": "verified_user",
+      "title": "Integrity",
+      "description": "Secure, reliable systems users can trust."
+    },
+    {
+      "icon": "bolt",
+      "title": "Momentum",
+      "description": "Ship iteratively, improve continuously."
+    }
+  ],
+  "skills": [
+    { "icon": "bolt", "text": "Angular 18" },
+    { "icon": "data_object", "text": "TypeScript / RxJS" },
+    { "icon": "hub", "text": "Signals for State" },
+    { "icon": "rule", "text": "Typed Forms" },
+    { "icon": "integration_instructions", "text": "InjectionTokens" },
+    { "icon": "security", "text": "Interceptors / Guards" },
+    { "icon": "palette", "text": "Material M3 + Tokens" }
+  ],
+  "facts": [
+    {
+      "icon": "location_on",
+      "label": "Location",
+      "value": "Auckland, New Zealand"
+    },
+    { "icon": "event", "label": "Experience", "value": "9+ years" },
+    {
+      "icon": "alternate_email",
+      "label": "Email",
+      "value": "cm.young.nz@gmail.com"
+    },
+    { "icon": "call", "label": "Phone", "value": "+64 21 288 7337" },
+    {
+      "icon": "language",
+      "label": "LinkedIn",
+      "value": "linkedin.com/in/cameron-young-nz"
+    }
+  ]
+}

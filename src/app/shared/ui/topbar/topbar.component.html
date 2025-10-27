@@ -1,0 +1,14 @@
+<mat-progress-bar *ngIf="isLoading()" mode="indeterminate"></mat-progress-bar>
+
+<mat-toolbar color="primary">
+  <span class="brand">Cameron Profile</span>
+  <span class="spacer"></span>
+  <a mat-button routerLink="/home">Home</a>
+  <a mat-button routerLink="/profile">Profile</a>
+  <a mat-button routerLink="/projects">Projects</a>
+  <a mat-button routerLink="/skills">Skills</a>
+  <a mat-button routerLink="/timeline">Timeline</a>
+  <a mat-button routerLink="/resume">Resume</a>
+  <a mat-button routerLink="/contact">Contact</a>
+  <a mat-button *ngIf="isAuthed()" routerLink="/admin/dashboard">Admin</a>
+</mat-toolbar>

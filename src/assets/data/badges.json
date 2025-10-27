@@ -1,0 +1,9 @@
+[
+  { "icon": "bolt", "text": "Angular 18 — standalone" },
+  { "icon": "hub", "text": "Signals for state" },
+  { "icon": "security", "text": "Interceptors + Guards" },
+  { "icon": "fingerprint", "text": "InjectionTokens" },
+  { "icon": "auto_fix_high", "text": "APP_INITIALIZER startup" },
+  { "icon": "rule", "text": "Typed Forms" },
+  { "icon": "palette", "text": "Material M3 + tokens" }
+]
