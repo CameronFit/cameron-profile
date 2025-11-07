@@ -1,9 +1,9 @@
-import { Component, computed, inject, Input, signal } from '@angular/core';
-import { CommonModule } from '@angular/common'; // ✅ add this
+import { Component, Input, signal, ChangeDetectionStrategy } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
-import { AUTH_STATE } from '../../core/tokens/auth-state.token';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatRippleModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-custom-sidenav',
@@ -12,11 +12,13 @@ import { AUTH_STATE } from '../../core/tokens/auth-state.token';
     CommonModule,
     RouterLink,
     RouterLinkActive,
-    MatListModule,
     MatIconModule,
-  ], // ✅ include CommonModule
+    MatTooltipModule,
+    MatRippleModule,
+  ],
   templateUrl: './custom-sidenav.component.html',
   styleUrls: ['./custom-sidenav.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomSidenavComponent {
   sideNavCollapsed = signal(false);
@@ -24,36 +26,9 @@ export class CustomSidenavComponent {
     this.sideNavCollapsed.set(val);
   }
 
-  private auth = inject(AUTH_STATE);
-
-  private readonly allItems = [
-    { label: 'Home', route: '/home', icon: 'home', roles: ['public'] },
-    { label: 'Profile', route: '/profile', icon: 'person', roles: ['public'] },
-    { label: 'Projects', route: '/projects', icon: 'work', roles: ['public'] },
-    {
-      label: 'Architecture',
-      route: '/architecture',
-      icon: 'account_tree',
-      roles: ['public'],
-    },
-    {
-      label: 'Résumé',
-      route: '/portfolio/resume',
-      icon: 'description',
-      roles: ['public'],
-    },
-    // { label: 'Playground',   route: '/playground',       icon: 'toys',           roles: ['public'] },
-    { label: 'Contact', route: '/contact', icon: 'mail', roles: ['public'] },
-    { label: 'Admin', route: '/admin', icon: 'lock', roles: ['admin'] },
-  ];
-
-  readonly menuItems = computed(() => {
-    const isAdmin = this.auth.hasRole('admin');
-    return this.allItems.filter(
-      (i) =>
-        i.roles.includes('public') || (isAdmin && i.roles.includes('admin'))
-    );
-  });
-
-  profilePicSize = computed(() => (this.sideNavCollapsed() ? '32' : '100'));
+  readonly menuItems = signal([
+    { label: 'Profile', route: '/profile', icon: 'account_circle', query: {} },
+    { label: 'Resume', route: '/resume', icon: 'article', query: {} },
+    { label: 'Contact', route: '/contact', icon: 'mail', query: {} },
+  ]);
 }

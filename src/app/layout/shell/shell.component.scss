@@ -1,3 +1,5 @@
+@import '../../../styles/responsive';
+
 /* Top bar */
 .app-toolbar {
   position: sticky;
@@ -6,6 +8,13 @@
   height: var(--topbar-height);
   background: var(--topbar-bg);
   color: var(--text);
+  padding: 0 var(--spacing-4);
+
+  @include media-breakpoint-down(sm) {
+    height: var(--topbar-height-mobile);
+    padding: 0 var(--spacing-2);
+  }
+
   .spacer { flex: 1; }
 }
 
@@ -13,15 +22,25 @@
 .app-container {
   height: calc(100vh - var(--topbar-height));
   background: var(--surface-bg);
+
+  @include media-breakpoint-down(sm) {
+    height: calc(100vh - var(--topbar-height-mobile));
+  }
 }
 
-/* Straight edges on the drawer */
+/* Sidenav */
 .app-sidenav {
-  background: var(--sidenav-bg);
+  background: var(--surface-bg); /* match main app background */
   border-right: 1px solid var(--border-weak);
   box-shadow: var(--shadow-1);
-  border-top-right-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
+  transition: all 0.3s ease;
+
+  @include media-breakpoint-down(sm) {
+    box-shadow: var(--shadow-4);
+    position: absolute;
+    height: 100%;
+    z-index: 4;
+  }
 }
 
 /* Page area */
@@ -29,30 +48,56 @@
   padding: var(--page-pad);
   min-height: 100%;
   color: var(--text);
+  transition: margin-left 0.3s ease;
+
+  @include media-breakpoint-down(sm) {
+    padding: var(--page-pad-mobile);
+  }
 }
 
-/* --- The important part: control BOTH widths and content offset --- */
-/* Default (expanded) */
-.app-container .mat-drawer {
-  width: var(--nav-width);                 /* e.g. 260px */
-  min-width: var(--nav-width);
-  max-width: var(--nav-width);
-}
-.app-container .mat-drawer-content {
-  margin-left: var(--nav-width);
+/* Responsive navigation widths */
+@include media-breakpoint-up(md) {
+  /* Default (expanded) */
+  .app-container .mat-drawer {
+    width: var(--nav-width);
+    min-width: var(--nav-width);
+    max-width: var(--nav-width);
+  }
+  .app-container .mat-drawer-content {
+    margin-left: var(--nav-width);
+  }
+
+  /* Collapsed */
+  .app-container.collapsed .mat-drawer {
+    width: var(--nav-width-collapsed);
+    min-width: var(--nav-width-collapsed);
+    max-width: var(--nav-width-collapsed);
+  }
+  .app-container.collapsed .mat-drawer-content {
+    margin-left: var(--nav-width-collapsed);
+  }
 }
 
-/* Collapsed */
-.app-container.collapsed .mat-drawer {
-  width: var(--nav-width-collapsed);       /* e.g. 72px */
-  min-width: var(--nav-width-collapsed);
-  max-width: var(--nav-width-collapsed);
-}
-.app-container.collapsed .mat-drawer-content {
-  margin-left: var(--nav-width-collapsed);
-}
+/* Mobile navigation */
+@include media-breakpoint-down(sm) {
+  .app-container {
+    position: relative;
+    overflow: hidden;
 
-/* Make it feel nice */
+    .mat-drawer,
+    &.collapsed .mat-drawer {
+      width: 85vw;
+      max-width: 300px;
+      min-width: auto;
+      transform: none;
+    }
+    
+    .mat-drawer-content,
+    &.collapsed .mat-drawer-content {
+      margin-left: 0;
+    }
+  }
+}
 .app-container .mat-drawer,
 .app-container .mat-drawer-content {
   transition: margin 250ms ease, width 250ms ease;

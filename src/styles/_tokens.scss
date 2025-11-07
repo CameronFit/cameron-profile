@@ -11,17 +11,58 @@
   --topbar-bg: #121212;
   --sidenav-bg: #101010;
   --surface-bg: #1a1a1a;
+  --surface-2: #151515; /* slightly raised */
+  --surface-3: #202020; /* more raised */
 
   /* Text */
   --text: #e6e6e6;
   --text-dim: #9ca3af;
+  --text-weak: #b9c0c7;
+
+  /* Typography scale (semantic font sizes) */
+  --fs-xs: 11px;
+  --fs-sm: 12.5px;
+  --fs-base: 14px; /* default body */
+  --fs-md: 15.5px; /* slightly elevated body */
+  --fs-lg: 18px; /* section headings */
+  --fs-xl: 22px; /* page title */
+  --fs-xxl: 28px; /* hero */
 
   /* Accents / Borders */
   --accent: #00a67e;
   --border-weak: #2a2a2a;
+  --border: #3a3a3a;
+  --hover-bg: rgba(255, 255, 255, 0.04);
+  --primary: #00a67e;
+  --primary-container: rgba(0, 166, 126, 0.12);
 
   /* Sidenav active indicator */
-  --sidenav-left: rgb(229, 243, 30);
+  --sidenav-left: #00a67e; /* green to match app accent */
+
+  /* Spacing scale */
+  --spacing-1: 4px;
+  --spacing-2: 6px;
+  --spacing-3: 8px;
+  --spacing-4: 12px;
+  --spacing-5: 16px;
+  --spacing-6: 20px;
+  --spacing-7: 28px;
+  --spacing-8: 36px;
+  --spacing-9: 48px;
+
+  /* Transitions & easings */
+  --ease-standard: cubic-bezier(.4,0,.2,1);
+  --ease-emphasized: cubic-bezier(.2, .8, .2, 1);
+  --transition-fast: 120ms var(--ease-standard);
+  --transition-medium: 240ms var(--ease-standard);
+  --transition-slow: 420ms var(--ease-emphasized);
+
+  /* Z-indices (layer ordering) */
+  --z-overlay: 1000;
+  --z-dropdown: 900;
+  --z-popover: 800;
+  --z-nav: 700;
+  --z-header: 600;
 
   /* Radii & shadows */
   --radius-sm: 6px;

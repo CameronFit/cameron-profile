@@ -1,81 +1,253 @@
+@import '../../../styles/responsive';
+
 :host {
   display: block;
   color: var(--text);
-
-  /* Smooth everything but keep it snappy */
-  * {
-    transition: all 200ms ease;
-  }
+  height: 100%;
+  background: var(--surface-bg); /* match main app background */
 }
+
+// ============================================================================
+// PROFILE HEADER SECTION
+// ============================================================================
 
 .sidenav-header {
-  padding: 20px 12px 12px;
-  text-align: center;
-  border-bottom: 1px solid var(--border-weak);
-  margin-bottom: 8px;
+  padding: var(--spacing-5) var(--spacing-4);
+  /* remove border so divider can visually separate */
+  border-bottom: none;
+  margin-bottom: var(--spacing-2); /* extra space before divider */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-3);
+  transition: padding 0.3s ease, gap 0.3s ease;
 
-  .avatar {
+  &.collapsed {
+    padding: var(--spacing-3) var(--spacing-2);
+    margin-bottom: var(--spacing-2);
+  }
+
+  @include media-breakpoint-down(sm) {
+    flex-direction: row;
+    align-items: center;
+    padding: var(--spacing-3);
+    gap: var(--spacing-3);
+    
+    &.collapsed {
+      padding: var(--spacing-2);
+      gap: var(--spacing-2);
+    }
+  }
+
+  .profile-avatar {
+    width: 112px;
+    height: 112px;
     border-radius: 50%;
     object-fit: cover;
-    display: inline-block;
-    margin-bottom: 10px;
-    box-shadow: var(--shadow-1);
+    background: var(--surface-2);
+    box-shadow: var(--shadow-2);
+    transition: all 0.3s ease;
+    border: 2px solid var(--border-weak);
+
+    &[data-collapsed="true"] {
+      width: 48px;
+      height: 48px;
+      box-shadow: var(--shadow-1);
+    }
+
+    @include media-breakpoint-down(sm) {
+      width: 56px;
+      height: 56px;
+      box-shadow: var(--shadow-1);
+
+      &[data-collapsed="true"] {
+        width: 44px;
+        height: 44px;
+      }
+    }
   }
 
-  .header-text {
-    height: 3rem;
-    overflow: hidden;
+  // removed avatar action for cleaner look
 
-    h2 {
+  .profile-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-1);
+    text-align: center;
+    animation: fadeIn 0.3s ease-out;
+
+    @include media-breakpoint-down(sm) {
+      align-items: flex-start;
+      text-align: left;
+      flex: 1;
+    }
+
+    .profile-name {
       margin: 0;
-      font-size: 0.95rem;
+      font-size: var(--fs-md);
       font-weight: 600;
-      line-height: 1.4rem;
+      line-height: 1.3;
+      color: var(--text);
     }
-    p {
-      margin: 0;
-      font-size: 0.8rem;
-      color: var(--text-dim);
-    }
-  }
 
-  .header-text.hide {
-    opacity: 0;
-    height: 0 !important;
+    .profile-role {
+      margin: 0;
+      font-size: var(--fs-sm);
+      color: var(--text-weak);
+      font-weight: 100;
+    }
   }
 }
 
-.nav-list {
-  padding: 8px 0;
+/* Divider between header and nav */
+.nav-divider {
+  height: 1px;
+  background: var(--border-weak);
+  margin: 0 var(--spacing-4) var(--spacing-3); /* sits right below header; bottom pushes menu down */
+  border-radius: 1px;
+}
 
-  a[mat-list-item] {
-    height: 44px;
-    border-left: 5px solid transparent; /* default */
-    border-radius: 0; /* straight edge */
-    color: var(--text);
+// ============================================================================
+// NAVIGATION MENU
+// ============================================================================
 
-    .mdc-list-item__primary-text {
-      /* text slot */
-      font-weight: 500;
-    }
+.nav-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  /* match divider horizontal inset so items align with the line */
+  padding: var(--spacing-1) var(--spacing-4) var(--spacing-2);
+  flex: 1;
+  overflow-y: auto;
+  /* stretch items full width for consistent left alignment */
+  align-items: stretch;
 
-    mat-icon[matListItemIcon] {
-      margin-right: 16px;
-      color: var(--text-dim);
-    }
+  /* WebKit browsers (Chrome, Safari) */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--border-weak);
+    border-radius: 3px;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.04);
+      background: var(--border);
+    }
+  }
+  // section headers removed for ultra-clean look
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  width: 100%;
+  justify-content: flex-start; /* left align icon + label */
+  text-align: left;
+
+  // Hover state
+  &:hover {
+    background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(255,255,255,0.04) 100%);
+    color: var(--text);
+  }
+
+  // Active state - Yellow left border like YouTube
+  &.active {
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--sidenav-left);
+    border-left-color: var(--sidenav-left);
+    font-weight: 600;
+
+    .nav-icon,
+    .material-symbols-outlined {
+      color: var(--sidenav-left);
+      font-variation-settings: "FILL" 1, "wght" 600, "GRAD" 0, "opsz" 24;
+    }
+  }
+
+  .nav-icon {
+    font-size: 22px;
+    width: 22px;
+    height: 22px;
+    line-height: 22px;
+    color: var(--text-dim);
+    transition: color .2s ease, font-variation-settings .2s ease;
+  }
+
+  .nav-label {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: opacity 0.2s ease;
+  }
+
+  // removed extra indicator element; border-left handles the active cue
+
+  @include media-breakpoint-down(sm) {
+    padding: 8px 12px;
+    gap: 10px;
+  }
+}
+
+// Collapsed state on desktop
+:host-context(.collapsed) {
+  .nav-item {
+    justify-content: center;
+    padding: 10px 8px;
+    border-left: none;
+
+    .nav-label {
+      display: none;
     }
 
-    &.is-active {
-      border-left-color: var(--sidenav-left);
-      background: rgba(255, 255, 255, 0.06);
+    &.active { background: rgba(255,255,255,0.06); }
+  }
+}
 
-      mat-icon[matListItemIcon] {
-        color: var(--text);
-      }
-    }
+// ============================================================================
+// FOOTER
+// ============================================================================
+
+.sidenav-footer {
+  padding: var(--spacing-3) var(--spacing-4);
+  border-top: 1px solid var(--border-weak);
+  text-align: center;
+
+  .footer-text {
+    margin: 0;
+    font-size: var(--fs-xs);
+    color: var(--text-weak);
+    font-weight: 400;
+  }
+}
+
+// ============================================================================
+// ANIMATIONS
+// ============================================================================
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 
@@ -118,4 +290,16 @@ mat-icon.material-symbols-outlined.filled {
   /* Active = filled + a bit bolder + your accent color if you want */
   font-variation-settings: "FILL" 1, "wght" 600, "GRAD" 0, "opsz" 24;
   color: var(--text);
+}
+
+/* Rounded variant support */
+mat-icon.material-symbols-rounded {
+  font-family: 'Material Symbols Rounded' !important;
+  font-style: normal;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  transition: font-variation-settings 0.25s ease, color 0.25s ease;
+}
+
+mat-icon.material-symbols-rounded.filled {
+  font-variation-settings: 'FILL' 1, 'wght' 600, 'GRAD' 0, 'opsz' 24;
 }

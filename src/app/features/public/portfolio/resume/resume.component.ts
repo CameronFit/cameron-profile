@@ -4,14 +4,19 @@ import {
   computed,
   inject,
   signal,
+  OnInit,
+  OnDestroy
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { DOCS_CONFIG } from '../../../../core/tokens/docs.token';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Subject, takeUntil } from 'rxjs';
 
 type DocKind = 'resume' | 'cover';
 
@@ -20,20 +25,39 @@ type DocKind = 'resume' | 'cover';
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink,
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
+    MatTooltipModule,
   ],
   templateUrl: './resume.component.html',
   styleUrls: ['./resume.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ResumeComponent {
+export class ResumeComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly cfg = inject(DOCS_CONFIG);
   private readonly sanitizer = inject(DomSanitizer);
+  private readonly breakpointObserver = inject(BreakpointObserver);
+  private readonly destroy$ = new Subject<void>();
+
+  readonly isMobile = signal(false);
+
+  ngOnInit() {
+    // Monitor screen size changes
+    this.breakpointObserver
+      .observe([Breakpoints.HandsetPortrait])
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(result => {
+        this.isMobile.set(result.matches);
+      });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   // Which doc are we showing? Default to 'resume'; sync with ?doc=cover|resume
   readonly doc = signal<DocKind>('resume');

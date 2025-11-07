@@ -1,35 +1,38 @@
-<div class="sidenav-header">
+<!-- Sidenav Header -->
+<header class="sidenav-header" [class.collapsed]="sideNavCollapsed()">
   <img
-    class="avatar"
-    [width]="profilePicSize()"
-    [height]="profilePicSize()"
-    src="/assets/cam-profile.jpeg"
-    alt="Profile picture"
+    src="assets/cam-profile.jpeg"
+    alt="Cameron Young"
+    class="profile-avatar"
+    [attr.data-collapsed]="sideNavCollapsed()"
   />
-  <div class="header-text" [class.hide]="sideNavCollapsed()">
-    <h2>Your Channel</h2>
-    <p>Cameron Young</p>
+  <div class="profile-info" *ngIf="!sideNavCollapsed()">
+    <h3 class="profile-name">Your Profile</h3>
+    <p class="profile-role">Cameron Young</p>
   </div>
-</div>
+</header>
 
-<mat-nav-list class="nav-list">
+
+<div class="nav-divider" aria-hidden="true"></div>
+
+<!-- Navigation -->
+<nav class="nav-container" role="navigation" aria-label="Primary">
   <a
-    mat-list-item
     *ngFor="let item of menuItems()"
     [routerLink]="item.route"
+    [queryParams]="item.query"
     routerLinkActive="is-active"
     #rla="routerLinkActive"
+    class="nav-item"
+    [class.active]="rla.isActive"
+    [attr.aria-current]="rla.isActive ? 'page' : null"
+    [matTooltip]="item.label"
+    [matTooltipDisabled]="!sideNavCollapsed()"
+    matRipple
+    [matRippleCentered]="true"
   >
-    <!-- ✅ exactly ONE icon slot -->
-    <mat-icon
-      matListItemIcon
-      class="material-symbols-outlined"
-      [class.filled]="rla.isActive"
-    >
-      {{ item.icon }}
-    </mat-icon>
-
-    <!-- ✅ exactly ONE title slot -->
-    <span matListItemTitle *ngIf="!sideNavCollapsed()">{{ item.label }}</span>
+    <mat-icon class="nav-icon material-symbols-outlined" [class.active-icon]="rla.isActive">{{ item.icon }}</mat-icon>
+    <span class="nav-label" *ngIf="!sideNavCollapsed()">{{ item.label }}</span>
   </a>
-</mat-nav-list>
+</nav>
+

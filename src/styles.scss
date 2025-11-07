@@ -28,10 +28,7 @@ body {
 }
 
 /* Scrollbar (subtle, dark) */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--border-weak) transparent;
-}
+/* Removed unsupported Firefox-only scrollbar properties to quiet diagnostics */
 *::-webkit-scrollbar {
   width: 10px;
   height: 10px;

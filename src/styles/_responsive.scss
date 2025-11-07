@@ -1,0 +1,80 @@
+// Breakpoints
+$breakpoints: (
+  xs: 0,
+  sm: 600px,
+  md: 960px,
+  lg: 1280px,
+  xl: 1920px
+);
+
+// Mixins
+@mixin media-breakpoint-up($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media (min-width: map-get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  }
+}
+
+@mixin media-breakpoint-down($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media (max-width: map-get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  }
+}
+
+// Layout tokens
+:root {
+  // Spacing
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  
+  // Navigation
+  --nav-width: 260px;
+  --nav-width-collapsed: 72px;
+  --nav-width-mobile: 0px;
+  
+  // Headers
+  --topbar-height: 64px;
+  --topbar-height-mobile: 56px;
+  
+  // Layout
+  --page-pad: var(--spacing-6);
+  --page-pad-mobile: var(--spacing-3);
+  
+  // Containers
+  --container-max: 1440px;
+  --container-pad: var(--spacing-4);
+  
+  // Document viewer
+  --doc-toolbar-height: 64px;
+  --doc-toolbar-height-mobile: 56px;
+  --doc-padding: var(--spacing-4);
+  --doc-border-radius: var(--radius-lg);
+}
+
+// Utility classes
+.hide-mobile {
+  @include media-breakpoint-down(sm) {
+    display: none !important;
+  }
+}
+
+.show-mobile {
+  @include media-breakpoint-up(md) {
+    display: none !important;
+  }
+}
+
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-pad);
+  width: 100%;
+}

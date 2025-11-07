@@ -1,102 +1,121 @@
-<section class="contact">
-  <!-- Header / Intro -->
-  <header class="intro card">
-    <div class="left">
-      <h1>Contact</h1>
-      <p class="hint">
-        Quick ways to reach me and a short form that opens your email client with the details pre-filled.
-      </p>
-    </div>
-    <div class="actions">
-      <a mat-stroked-button [href]="'mailto:' + email">
-        <mat-icon>mail</mat-icon>
-        Email
-      </a>
-      <a mat-stroked-button [href]="linkedIn" target="_blank" rel="noopener">
-        <mat-icon>public</mat-icon>
-        LinkedIn
-      </a>
-      <button mat-stroked-button (click)="downloadResume()">
-        <mat-icon>description</mat-icon>
-        Résumé
-      </button>
-      <button mat-stroked-button (click)="downloadCover()">
-        <mat-icon>drafts</mat-icon>
-        Cover Letter
-      </button>
-    </div>
-  </header>
-
-  <!-- Two-column layout: cards + form -->
-  <div class="grid">
-    <!-- Contact cards -->
-    <mat-card class="card info">
-      <mat-card-header>
-        <mat-icon mat-card-avatar>person</mat-icon>
-        <mat-card-title>Direct</mat-card-title>
-        <mat-card-subtitle>Preferred contact</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content>
-        <p>
-          <strong>Email:</strong>
-          <a [href]="'mailto:' + email">{{ email }}</a>
-        </p>
-        <p>
-          <strong>LinkedIn:</strong>
-          <a [href]="linkedIn" target="_blank" rel="noopener">/cameron-young-nz</a>
-        </p>
-        <p class="muted">I reply within 24 hours (NZT).</p>
-      </mat-card-content>
-    </mat-card>
-
-    <!-- Form -->
-    <mat-card class="card form">
-      <mat-card-header>
-        <mat-icon mat-card-avatar>edit</mat-icon>
-        <mat-card-title>Send a message</mat-card-title>
-        <mat-card-subtitle>Opens your email client</mat-card-subtitle>
-      </mat-card-header>
-
-      <mat-card-content>
-        <form [formGroup]="form" (ngSubmit)="openMailClient()" class="form-grid" autocomplete="on">
-          <mat-form-field appearance="outline">
-            <mat-label>Your name</mat-label>
-            <input matInput formControlName="name" placeholder="Jane Doe" />
-            <mat-error *ngIf="form.controls.name.hasError('required')">Name is required</mat-error>
-            <mat-error *ngIf="form.controls.name.hasError('minlength')">Min 2 characters</mat-error>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Your email</mat-label>
-            <input matInput formControlName="email" type="email" placeholder="you@example.com" />
-            <mat-error *ngIf="form.controls.email.hasError('required')">Email is required</mat-error>
-            <mat-error *ngIf="form.controls.email.hasError('email')">Enter a valid email</mat-error>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="subject">
-            <mat-label>Subject</mat-label>
-            <input matInput formControlName="subject" placeholder="Opportunity at TAP" />
-            <mat-error *ngIf="form.controls.subject.hasError('required')">Subject is required</mat-error>
-            <mat-error *ngIf="form.controls.subject.hasError('minlength')">Min 3 characters</mat-error>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="message">
-            <mat-label>Message</mat-label>
-            <textarea matInput formControlName="message" rows="6" placeholder="Hi Cameron…"></textarea>
-            <mat-error *ngIf="form.controls.message.hasError('required')">Message is required</mat-error>
-            <mat-error *ngIf="form.controls.message.hasError('minlength')">Min 10 characters</mat-error>
-          </mat-form-field>
-
-          <div class="form-actions">
-            <button mat-flat-button color="primary" type="submit" [disabled]="disabled()">
-              <mat-icon *ngIf="!sending()">send</mat-icon>
-              <mat-icon *ngIf="sending()">hourglass_empty</mat-icon>
-              {{ sending() ? 'Opening…' : 'Send' }}
-            </button>
-            <button mat-button type="button" (click)="form.reset()">Clear</button>
-          </div>
-        </form>
-      </mat-card-content>
-    </mat-card>
+<div class="contact-container">
+  <!-- Hero Section -->
+  <div class="contact-hero">
+    <h1>Get In Touch</h1>
+    <p>Have a question or want to work together? I'd love to hear from you.</p>
   </div>
-</section>
+
+  <!-- Main Content Grid -->
+  <div class="contact-grid">
+    <!-- Contact Form -->
+    <div class="contact-form-section">
+      <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" placeholder="Your name" />
+          @if (name?.invalid && name?.touched) {
+          <mat-error>Name is required (minimum 2 characters)</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" type="email" placeholder="your.email@example.com" />
+          @if (email?.invalid && email?.touched) {
+          <mat-error>Please enter a valid email address</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Subject</mat-label>
+          <input matInput formControlName="subject" placeholder="What is this about?" />
+          @if (subject?.invalid && subject?.touched) {
+          <mat-error>Subject is required (minimum 5 characters)</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width message-field">
+          <mat-label>Message</mat-label>
+          <textarea matInput formControlName="message" placeholder="Your message..." rows="6"></textarea>
+          @if (message?.invalid && message?.touched) {
+          <mat-error>Message is required (minimum 10 characters)</mat-error>
+          }
+        </mat-form-field>
+
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="contactForm.invalid || isSubmitting()"
+          class="submit-button"
+        >
+          @if (isSubmitting()) {
+          <mat-spinner diameter="20"></mat-spinner>
+          <span>Sending...</span>
+          } @else {
+          <ng-container>
+            <mat-icon>send</mat-icon>
+            <span>Send Message</span>
+          </ng-container>
+          }
+        </button>
+
+        @if (submitSuccess()) {
+        <div class="success-message">
+          <mat-icon>check_circle</mat-icon>
+          <span>Thank you! I'll get back to you soon.</span>
+        </div>
+        }
+      </form>
+    </div>
+
+    <!-- Contact Info Sidebar -->
+    <div class="contact-info-section">
+      <!-- Contact Details -->
+      <div class="info-card">
+        <h2>Contact Information</h2>
+        @for (info of contactInfo(); track info.label) {
+        <div class="contact-item">
+          <mat-icon class="contact-icon">{{ info.icon }}</mat-icon>
+          <div class="contact-content">
+            <h3>{{ info.label }}</h3>
+            @if (info.href) {
+            <a [href]="info.href">{{ info.value }}</a>
+            } @else {
+            <p>{{ info.value }}</p>
+            }
+          </div>
+        </div>
+        }
+      </div>
+
+      <!-- Social Links -->
+      <div class="info-card">
+        <h2>Follow Me</h2>
+        <div class="social-links">
+          @for (social of socialLinks(); track social.label) {
+          <a [href]="social.url" target="_blank" rel="noopener noreferrer" [title]="social.label" class="social-link">
+            <mat-icon>link</mat-icon>
+            <span>{{ social.label }}</span>
+          </a>
+          }
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="info-card">
+        <h2>Quick Links</h2>
+        <nav class="quick-links">
+          <a href="/profile" class="quick-link">
+            <mat-icon>person</mat-icon>
+            <span>View Profile</span>
+          </a>
+          <a href="/resume" class="quick-link">
+            <mat-icon>description</mat-icon>
+            <span>View Resume</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
