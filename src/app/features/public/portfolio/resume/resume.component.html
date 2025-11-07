@@ -1,56 +1,40 @@
 <section class="resume-shell">
   <mat-toolbar class="bar">
-    <button mat-icon-button (click)="back()">
+    <button mat-button (click)="back()">
       <mat-icon>arrow_back</mat-icon>
+      Back
     </button>
 
     <span class="title">{{ currentDocLabel() }}</span>
     <span class="spacer"></span>
 
-    <!-- Document type switcher -->
-    <div class="switcher-group">
-      <button mat-stroked-button (click)="show('resume')" [disabled]="isResume()">
-        <mat-icon>description</mat-icon>
-        <span class="button-text">Résumé</span>
-      </button>
-      <button mat-stroked-button (click)="show('cover')" [disabled]="!isResume()">
-        <mat-icon>drafts</mat-icon>
-        <span class="button-text">Cover</span>
-      </button>
-    </div>
+    <!-- Switcher -->
+    <button mat-stroked-button (click)="show('resume')" [disabled]="isResume()">
+      <mat-icon>description</mat-icon> Résumé
+    </button>
+    <button mat-stroked-button (click)="show('cover')" [disabled]="!isResume()">
+      <mat-icon>drafts</mat-icon> Cover Letter
+    </button>
 
-    <!-- Actions -->
-    <div class="action-group">
-      <a mat-icon-button [href]="plainUrl()" target="_blank" rel="noopener" matTooltip="Open in new tab">
-        <mat-icon>open_in_new</mat-icon>
-      </a>
-      <a mat-icon-button [href]="plainUrl()" download matTooltip="Download">
-        <mat-icon>download</mat-icon>
-      </a>
-      <button mat-icon-button (click)="print()" matTooltip="Print">
-        <mat-icon>print</mat-icon>
-      </button>
-    </div>
+    <a mat-stroked-button [href]="plainUrl()" target="_blank" rel="noopener">
+      <mat-icon>open_in_new</mat-icon> Open
+    </a>
+    <a mat-button [href]="plainUrl()" download>
+      <mat-icon>download</mat-icon> Download
+    </a>
+    <button mat-button (click)="print()">
+      <mat-icon>print</mat-icon> Print
+    </button>
   </mat-toolbar>
 
   <div class="viewer">
     <!-- Use SAFE value in resource URL context -->
-    <object
-      #pdfViewer
-      [attr.data]="safeUrl()"
-      type="application/pdf"
-      class="doc"
-      [attr.aria-label]="currentDocLabel() + ' PDF'"
-    >
-      <div class="fallback-message">
-        <p>
-          Your browser can't display PDFs.
-          <a [href]="plainUrl()" target="_blank" rel="noopener"
-            >Open {{ currentDocLabel() }}</a
-          >
-          or use the Download button.
-        </p>
-      </div>
-    </object>
+      <p>
+        Your browser can’t display PDFs.
+        <a [href]="plainUrl()" target="_blank" rel="noopener"
+          >Open {{ currentDocLabel() }}</a
+        >
+        or use the Download button.
+      </p>
   </div>
 </section>
