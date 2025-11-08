@@ -33,8 +33,11 @@
   --border-weak: #2a2a2a;
   --border: #3a3a3a;
   --hover-bg: rgba(255, 255, 255, 0.04);
+  --hover-bg-strong: rgba(255, 255, 255, 0.06); /* elevated hover/active */
   --primary: #00a67e;
   --primary-container: rgba(0, 166, 126, 0.12);
+  --primary-hover: #00976f; /* 5% darken of primary */
+  --nav-active-border: var(--primary); /* active left border color for nav */
 
   /* Sidenav active indicator */
   --sidenav-left: #00a67e; /* green to match app accent */

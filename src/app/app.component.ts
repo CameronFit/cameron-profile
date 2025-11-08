@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ShellComponent } from './layout/shell/shell.component';
 
 @Component({
@@ -6,6 +6,7 @@ import { ShellComponent } from './layout/shell/shell.component';
   standalone: true,
   imports: [ShellComponent],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {}

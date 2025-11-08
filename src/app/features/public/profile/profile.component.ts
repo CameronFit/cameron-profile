@@ -20,7 +20,6 @@ export class ProfileComponent implements OnInit {
 
   readonly profile = this.content.profile;
 
-  // Computed property to extract location from facts
   readonly location = computed(() => {
     const p = this.profile();
     if (!p) return '';
