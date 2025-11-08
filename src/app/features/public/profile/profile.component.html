@@ -1,60 +1,63 @@
-<div class="profile-container">
-  <!-- Hero Section -->
-  <section class="hero-section">
-    <div class="hero-content">
-      <img [src]="profileImage" alt="Cameron Young" class="hero-image" />
-      <div class="hero-text">
-        <h1>Cameron Young</h1>
-        <p class="subtitle">Angular Front-End Engineer | .NET Integration Specialist</p>
-        <p class="location">📍 Auckland, New Zealand</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- About Section -->
-  <section class="about-section">
-    <h2>About</h2>
-    <p>
-      Full-stack engineer with 5+ years of experience building scalable applications. Expert in Angular, .NET,
-      and cloud technologies. Passionate about clean code, responsive design, and building amazing user experiences.
-    </p>
-  </section>
-
-  <!-- Skills Section -->
-  <section class="skills-section">
-    <h2>Skills</h2>
-    <div class="skills-grid">
-      <div *ngFor="let skillGroup of skills" class="skill-group">
-        <h3>{{ skillGroup.category }}</h3>
-        <ul class="skill-list">
-          <li *ngFor="let skill of skillGroup.items">{{ skill }}</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- Experience Section -->
-  <section class="experience-section">
-    <h2>Experience</h2>
-    <div class="experience-list">
-      <article *ngFor="let exp of experience" class="experience-item">
-        <div class="experience-header">
-          <h3>{{ exp.role }}</h3>
-          <span class="duration">{{ exp.duration }}</span>
+<ng-container *ngIf="profile() as p">
+  <div class="profile-container">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-content">
+  <img [src]="p.avatar" alt="{{ p.name }}" title="{{ p.name }}" class="hero-image" />
+        <div class="hero-text">
+          <h1>{{ p.name }}</h1>
+          <p class="subtitle">{{ p.title }}</p>
+          <p class="location">
+            <mat-icon inline>location_on</mat-icon>
+            {{ location() }}
+          </p>
         </div>
-        <p class="company">{{ exp.company }}</p>
-        <p class="description">{{ exp.description }}</p>
-      </article>
-    </div>
-  </section>
+      </div>
+    </section>
 
-  <!-- CTA Section -->
-  <section class="cta-section">
-    <h2>Let's Work Together</h2>
-    <p>Interested in collaborating? Let's get in touch!</p>
-    <a routerLink="/contact" class="cta-button">
-      <mat-icon>mail</mat-icon>
-      Send Me a Message
-    </a>
-  </section>
-</div>
+    <!-- About Section -->
+    <section class="about-section">
+      <h2>About</h2>
+      <p>{{ p.intro }}</p>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="skills-section">
+      <h2>Skills</h2>
+      <div class="skills-grid">
+        <div class="skill-group" *ngFor="let group of p.skills">
+          <h3>{{ group.category }}</h3>
+          <ul class="skill-list">
+            <li *ngFor="let item of group.items">{{ item }}</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Values Section -->
+    <section class="values-section">
+      <h2>Values</h2>
+      <div class="values-grid">
+        <div class="value-item" *ngFor="let v of p.values">
+          <mat-icon>{{ v.icon }}</mat-icon>
+          <div>
+            <h3>{{ v.title }}</h3>
+            <p>{{ v.description }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <h2>Let's Work Together</h2>
+      <p>Interested in collaborating? Let's get in touch!</p>
+      <a routerLink="/contact" class="cta-button">
+        <mat-icon>mail</mat-icon>
+        Send Me a Message
+      </a>
+    </section>
+  </div>
+</ng-container>

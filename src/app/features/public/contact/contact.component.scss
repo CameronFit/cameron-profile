@@ -17,7 +17,7 @@
 // ============================================================================
 
 .contact-hero {
-  text-align: center;
+  text-align: left;
   margin-bottom: var(--spacing-8);
 
   h1 {
@@ -154,21 +154,10 @@
 
 .contact-info-section {
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* Always stack by default */
   gap: var(--spacing-4);
 
-  @include media-breakpoint-down(md) {
-    flex-direction: row;
-    gap: var(--spacing-4);
-
-    .info-card {
-      flex: 1;
-    }
-  }
-
-  @include media-breakpoint-down(sm) {
-    flex-direction: column;
-  }
+  /* Optional: if you later want them side-by-side only on large desktops, you can add a breakpoint-up(lg) rule */
 }
 
 .info-card {

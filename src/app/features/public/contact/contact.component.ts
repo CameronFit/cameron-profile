@@ -40,21 +40,20 @@ export class ContactComponent implements OnInit {
     {
       icon: 'location_on',
       label: 'Location',
-      value: 'San Francisco, CA',
+      value: 'Auckland, NZ',
       href: null,
     },
     {
       icon: 'phone',
       label: 'Phone',
-      value: '+1 (555) 123-4567',
-      href: 'tel:+15551234567',
+      value: '+64 288 7337',
+      href: 'tel:+642887337',
     },
   ]);
 
   readonly socialLinks = computed(() => [
     { icon: 'fa-linkedin', label: 'LinkedIn', url: 'https://linkedin.com' },
     { icon: 'fa-github', label: 'GitHub', url: 'https://github.com' },
-    { icon: 'fa-twitter', label: 'Twitter', url: 'https://twitter.com' },
   ]);
 
   constructor(
