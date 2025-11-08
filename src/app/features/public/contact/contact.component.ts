@@ -1,23 +1,12 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  inject,
-  signal,
-} from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  ReactiveFormsModule,
-  NonNullableFormBuilder,
-  Validators,
-} from '@angular/forms';
-import { MatCardModule } from '@angular/material/card';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { DOCS_CONFIG } from '../../../core/tokens/docs.token';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-contact',
@@ -25,79 +14,106 @@ import { DOCS_CONFIG } from '../../../core/tokens/docs.token';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MatCardModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    MatSnackBarModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ContactComponent {
-  private fb = inject(NonNullableFormBuilder);
-  private snack = inject(MatSnackBar);
-  private docs = inject(DOCS_CONFIG);
+export class ContactComponent implements OnInit {
+  contactForm!: FormGroup;
+  readonly isSubmitting = signal(false);
+  readonly submitSuccess = signal(false);
+  readonly isMobile = signal(false);
 
-  // Quick links
-  readonly email = 'cm.young.nz@gmail.com';
-  readonly linkedIn = 'https://www.linkedin.com/in/cameron-young-nz';
-  readonly resumeUrl = this.docs.resumeUrl;
-  readonly coverUrl = this.docs.coverLetterUrl;
+  readonly contactInfo = computed(() => [
+    {
+      icon: 'email',
+      label: 'Email',
+      value: 'cameron@example.com',
+      href: 'mailto:cameron@example.com',
+    },
+    {
+      icon: 'location_on',
+      label: 'Location',
+      value: 'Auckland, NZ',
+      href: null,
+    },
+    {
+      icon: 'phone',
+      label: 'Phone',
+      value: '+64 288 7337',
+      href: 'tel:+642887337',
+    },
+  ]);
 
-  // Typed, reactive form
-  readonly form = this.fb.group({
-    name: this.fb.control('', {
-      validators: [Validators.required, Validators.minLength(2)],
-    }),
-    email: this.fb.control('', {
-      validators: [Validators.required, Validators.email],
-    }),
-    subject: this.fb.control('', {
-      validators: [Validators.required, Validators.minLength(3)],
-    }),
-    message: this.fb.control('', {
-      validators: [Validators.required, Validators.minLength(10)],
-    }),
-  });
+  readonly socialLinks = computed(() => [
+    { icon: 'fa-linkedin', label: 'LinkedIn', url: 'https://linkedin.com' },
+    { icon: 'fa-github', label: 'GitHub', url: 'https://github.com' },
+  ]);
 
-  readonly disabled = computed(() => this.form.invalid || this.sending());
-  readonly sending = signal(false);
+  constructor(
+    private fb: FormBuilder,
+    private breakpointObserver: BreakpointObserver
+  ) {
+    this.initForm();
+  }
 
-  openMailClient() {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      this.snack.open('Please fix the highlighted fields.', 'Close', {
-        duration: 2500,
+  ngOnInit(): void {
+    this.breakpointObserver
+      .observe([Breakpoints.Handset])
+      .subscribe(result => {
+        this.isMobile.set(result.matches);
       });
+  }
+
+  private initForm(): void {
+    this.contactForm = this.fb.group({
+      name: ['', [Validators.required, Validators.minLength(2)]],
+      email: ['', [Validators.required, Validators.email]],
+      subject: ['', [Validators.required, Validators.minLength(5)]],
+      message: ['', [Validators.required, Validators.minLength(10)]],
+    });
+  }
+
+  onSubmit(): void {
+    if (this.contactForm.invalid || this.isSubmitting()) {
       return;
     }
 
-    this.sending.set(true);
+    this.isSubmitting.set(true);
 
-    const { name, email, subject, message } = this.form.getRawValue();
-    // Build a safe mailto link
-    const esc = (s: string) => encodeURIComponent(s ?? '');
-    const body = `Name: ${name}\nEmail: ${email}\n\n${message}`;
-    const href = `mailto:${this.email}?subject=${esc(subject)}&body=${esc(
-      body
-    )}`;
+    // Simulate API call
+    setTimeout(() => {
+      console.log('Form submitted:', this.contactForm.value);
+      this.isSubmitting.set(false);
+      this.submitSuccess.set(true);
+      this.contactForm.reset();
 
-    // Open user mail client (no backend; demo-friendly)
-    window.location.href = href;
-
-    // UX feedback
-    this.snack.open('Opening your mail client…', undefined, { duration: 2000 });
-    setTimeout(() => this.sending.set(false), 400);
+      // Reset success message after 4 seconds
+      setTimeout(() => {
+        this.submitSuccess.set(false);
+      }, 4000);
+    }, 1500);
   }
 
-  downloadResume() {
-    window.open(this.resumeUrl, '_blank', 'noopener');
+  get name() {
+    return this.contactForm.get('name');
   }
 
-  downloadCover() {
-    window.open(this.coverUrl, '_blank', 'noopener');
+  get email() {
+    return this.contactForm.get('email');
+  }
+
+  get subject() {
+    return this.contactForm.get('subject');
+  }
+
+  get message() {
+    return this.contactForm.get('message');
   }
 }

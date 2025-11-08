@@ -47,8 +47,9 @@ export interface ProfileData {
     variant?: 'flat' | 'stroked' | 'link';
   }[];
   values: { icon: string; title: string; description: string }[];
-  skills: { icon: string; text: string }[];
+  skills: { category: string; items: string[] }[];
   facts: { label: string; value: string; icon?: string }[];
+  highlights?: { icon: string; title: string; subtitle?: string; description?: string }[];
 }
 
 /** Projects */

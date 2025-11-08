@@ -29,14 +29,9 @@
 
   <div class="viewer">
     <!-- Use SAFE value in resource URL context -->
-    <object
-      [attr.data]="safeUrl()"
-      type="application/pdf"
-      class="doc"
-      [attr.aria-label]="currentDocLabel() + ' PDF'"
-    >
+    <object [attr.data]="safeUrl()" type="application/pdf" class="pdf-object">
       <p>
-        Your browser can’t display PDFs.
+        Your browser can't display PDFs.
         <a [href]="plainUrl()" target="_blank" rel="noopener"
           >Open {{ currentDocLabel() }}</a
         >

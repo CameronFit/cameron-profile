@@ -5,8 +5,6 @@
 @use "./styles/tokens" as *;
 @use "./styles/theme" as *;
 
-@import "gridstack/dist/gridstack.min.css";
-
 /* Reset-ish */
 *,
 *::before,
@@ -28,10 +26,7 @@ body {
 }
 
 /* Scrollbar (subtle, dark) */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--border-weak) transparent;
-}
+/* Removed unsupported Firefox-only scrollbar properties to quiet diagnostics */
 *::-webkit-scrollbar {
   width: 10px;
   height: 10px;

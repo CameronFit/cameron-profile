@@ -1,7 +1,9 @@
 {
   "badges": [
     { "icon": "bolt", "text": "Signals" },
-    { "icon": "vpn_key", "text": "Guards & Interceptors" },
+    { "icon": "sync_lock", "text": "Interceptors" },
+    { "icon": "admin_panel_settings", "text": "Guards" },
+    { "icon": "extension", "text": "InjectionTokens" },
     { "icon": "fact_check", "text": "Testable" },
     { "icon": "palette", "text": "Material M3" }
   ],
@@ -27,40 +29,6 @@
       "why": "Topbar, sidenav, shell layout with signals."
     }
   ],
-  "flows": [
-    {
-      "title": "Auth Flow",
-      "steps": [
-        "User logs in → API sets HttpOnly refresh cookie; app stores access token in memory.",
-        "Requests include Bearer access token via interceptor.",
-        "401 → interceptor triggers refresh (cookie), queues and replays requests."
-      ]
-    },
-    {
-      "title": "Loading Flow",
-      "steps": [
-        "loading.interceptor toggles a global loading signal per request.",
-        "Topbar shows a thin progress indicator bound to the signal."
-      ]
-    },
-    {
-      "title": "A11y & Performance",
-      "steps": [
-        "Material M3 + tokens for contrast and consistent spacing.",
-        "Standalone components for smaller bundles; lazy routes for features."
-      ]
-    }
-  ],
-  "snippets": {
-    "guard": "import { inject } from '@angular/core';\nimport { CanMatchFn, Route } from '@angular/router';\nimport { AUTH_STATE } from '../core/tokens';\n\nexport const authGuard: CanMatchFn = (route: Route) => {\n  const auth = inject(AUTH_STATE);\n  if (!auth.isAuthenticated()) {\n    auth.redirectToLogin(route.path ?? '/admin');\n    return false;\n  }\n  return true;\n};",
-    "authInterceptor": "import { HttpInterceptorFn, HttpRequest, HttpHandlerFn, HttpErrorResponse } from '@angular/common/http';\nimport { inject, signal } from '@angular/core';\nimport { AUTH_STATE } from '../core/tokens';\nimport { catchError, firstValueFrom, throwError } from 'rxjs';\n\nconst refreshing = signal(false);\nlet queue: ((token: string | null) => void)[] = [];\n\nexport const authInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, next: HttpHandlerFn) => {\n  const auth = inject(AUTH_STATE);\n  const token = auth.accessToken();\n  const authed = token ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } }) : req;\n  return next(authed).pipe(\n    catchError((err: HttpErrorResponse) => {\n      if (err.status === 401) {\n        return firstValueFrom(refreshIfNeeded(auth)).then((newToken) => {\n          const retry = newToken ? authed.clone({ setHeaders: { Authorization: `Bearer ${newToken}` } }) : authed;\n          return next(retry).toPromise();\n        });\n      }\n      return throwError(() => err);\n    })\n  );\n};\n\nfunction refreshIfNeeded(auth: any) {\n  return new Promise<string | null>((resolve) => {\n    queue.push(resolve);\n    if (refreshing()) return;\n    refreshing.set(true);\n    auth.refresh().finally(() => {\n      refreshing.set(false);\n      const t = auth.accessToken();\n      queue.forEach((fn) => fn(t));\n      queue = [];\n    });\n  });\n}",
-    "loadingInterceptor": "import { HttpInterceptorFn } from '@angular/common/http';\nimport { inject } from '@angular/core';\nimport { APP_LOADING } from '../core/tokens';\nimport { finalize } from 'rxjs/operators';\n\nexport const loadingInterceptor: HttpInterceptorFn = (req, next) => {\n  const loading = inject(APP_LOADING);\n  loading.set(true);\n  return next(req).pipe(finalize(() => loading.set(false)));\n};",
-    "errorInterceptor": "import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';\nimport { inject } from '@angular/core';\nimport { APP_NOTIFIER } from '../core/tokens';\nimport { catchError, throwError } from 'rxjs';\n\nexport const errorInterceptor: HttpInterceptorFn = (req, next) => {\n  const notify = inject(APP_NOTIFIER);\n  return next(req).pipe(\n    catchError((err: HttpErrorResponse) => {\n      const message = err.error?.message || 'Something went wrong. Please try again.';\n      notify.error(message);\n      return throwError(() => err);\n    })\n  );\n};",
-    "authState": "import { InjectionToken, signal } from '@angular/core';\n\nexport interface AuthState {\n  accessToken: ReturnType<typeof signal<string | null>>;\n  user: ReturnType<typeof signal<{ id: string; roles: string[] } | null>>;\n  isAuthenticated: () => boolean;\n  hasRole: (role: string) => boolean;\n  setToken: (t: string | null) => void;\n  logoutLocal: () => void;\n  redirectToLogin: (returnUrl?: string) => void;\n  refresh: () => Promise<void>;\n}\n\nexport const AUTH_STATE = new InjectionToken<AuthState>('AUTH_STATE', {\n  providedIn: 'root',\n  factory: () => {\n    const accessToken = signal<string | null>(null);\n    const user = signal<{ id: string; roles: string[] } | null>(null);\n\n    const isAuthenticated = () => !!accessToken();\n    const hasRole = (role: string) => !!user()?.roles?.includes(role);\n\n    return {\n      accessToken,\n      user,\n      isAuthenticated,\n      hasRole,\n      setToken: (t) => accessToken.set(t),\n      logoutLocal: () => { accessToken.set(null); user.set(null); },\n      redirectToLogin: (returnUrl?: string) => { window.location.href = `/login?returnUrl=${encodeURIComponent(returnUrl || '/')}`; },\n      refresh: async () => { /* call /auth/refresh (HttpOnly cookie), then set accessToken */ }\n    };\n  },\n});",
-    "widgetToken": "import { InjectionToken, Type } from '@angular/core';\n\nexport interface WidgetDef { id: string; title: string; component: Type<any>; roles?: string[]; }\n\nexport const DASHBOARD_WIDGETS = new InjectionToken<WidgetDef[]>('DASHBOARD_WIDGETS', {\n  providedIn: 'root',\n  factory: () => []\n});\n\nexport const WIDGET_PROVIDERS = [\n  {\n    provide: DASHBOARD_WIDGETS,\n    multi: true,\n    useValue: { id: 'pipeline', title: 'Pipeline', component: PipelineWidgetComponent, roles: ['broker','adviser'] }\n  }\n];",
-    "signalsVsBs": "import { signal, computed } from '@angular/core';\n\nconst items = signal<number[]>([]);\nconst count = computed(() => items().length);\n\nfunction add(n: number) { items.update((a) => [...a, n]); }",
-    "routes": "import { Routes } from '@angular/router';\nimport { authGuard } from './core/auth.guard';\n\nexport const routes: Routes = [\n  { path: '', loadComponent: () => import('./features/public/home/home.component').then(m => m.HomeComponent), title: 'Home' },\n  { path: 'admin', canMatch: [authGuard], loadComponent: () => import('./features/admin/admin-shell.component').then(m => m.AdminShellComponent), title: 'Admin' },\n  { path: '**', redirectTo: '' }\n];"
-  },
   "whatWhy": [
     {
       "title": "Standalone Components",
@@ -68,7 +36,7 @@
     },
     {
       "title": "Signals (App State)",
-      "body": "Simple and explicit state for UI and session. Use RxJS where streams/IO are real."
+      "body": "Simple, explicit state for UI + session. Use RxJS for streams/IO, signals for local UI."
     },
     {
       "title": "Interceptors & Guards",
@@ -76,7 +44,7 @@
     },
     {
       "title": "InjectionTokens",
-      "body": "Like labeled sockets — plug different implementations in tests or per environment."
+      "body": "Like labeled sockets — plug different implementations for tests/env."
     },
     {
       "title": "Material M3 + Tokens",
@@ -84,7 +52,17 @@
     },
     {
       "title": "Production Auth",
-      "body": "Access token in memory, refresh in HttpOnly cookie, safe startup refresh & replay."
+      "body": "Access token in memory; refresh via HttpOnly cookie; safe startup refresh & replay."
     }
-  ]
+  ],
+  "snippets": {
+    "guard": "import { inject } from '@angular/core';\nimport { CanMatchFn, Route } from '@angular/router';\nimport { AUTH_STATE } from '../core/tokens';\n\nexport const authGuard: CanMatchFn = (route: Route) => {\n  const auth = inject(AUTH_STATE);\n  if (!auth.isAuthenticated()) {\n    auth.redirectToLogin(route.path ?? '/admin');\n    return false;\n  }\n  return true;\n};",
+    "authInterceptor": "import { HttpInterceptorFn, HttpRequest, HttpHandlerFn, HttpErrorResponse } from '@angular/common/http';\nimport { inject, signal } from '@angular/core';\nimport { AUTH_STATE } from '../core/tokens';\nimport { catchError, firstValueFrom, throwError } from 'rxjs';\n\nconst refreshing = signal(false);\nlet queue: ((t: string | null) => void)[] = [];\n\nexport const authInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, next: HttpHandlerFn) => {\n  const auth = inject(AUTH_STATE);\n  const token = auth.accessToken();\n  const authed = token ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } }) : req;\n  return next(authed).pipe(\n    catchError((err: HttpErrorResponse) => {\n      if (err.status === 401) {\n        return firstValueFrom(refreshIfNeeded(auth)).then((newToken) => {\n          const retry = newToken ? authed.clone({ setHeaders: { Authorization: `Bearer ${newToken}` } }) : authed;\n          return next(retry).toPromise();\n        });\n      }\n      return throwError(() => err);\n    })\n  );\n};\n\nfunction refreshIfNeeded(auth: any) {\n  return new Promise<string | null>((resolve) => {\n    queue.push(resolve);\n    if (refreshing()) return;\n    refreshing.set(true);\n    auth.refresh().finally(() => {\n      refreshing.set(false);\n      const t = auth.accessToken();\n      queue.forEach((fn) => fn(t));\n      queue = [];\n    });\n  });\n}",
+    "loadingInterceptor": "import { HttpInterceptorFn } from '@angular/common/http';\nimport { inject } from '@angular/core';\nimport { APP_LOADING } from '../core/tokens';\nimport { finalize } from 'rxjs/operators';\n\nexport const loadingInterceptor: HttpInterceptorFn = (req, next) => {\n  const loading = inject(APP_LOADING);\n  loading.set(true);\n  return next(req).pipe(finalize(() => loading.set(false)));\n};",
+    "errorInterceptor": "import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';\nimport { inject } from '@angular/core';\nimport { APP_NOTIFIER } from '../core/tokens';\nimport { catchError, throwError } from 'rxjs';\n\nexport const errorInterceptor: HttpInterceptorFn = (req, next) => {\n  const notify = inject(APP_NOTIFIER);\n  return next(req).pipe(\n    catchError((err: HttpErrorResponse) => {\n      const message = err.error?.message || 'Something went wrong. Please try again.';\n      notify.error(message);\n      return throwError(() => err);\n    })\n  );\n};",
+    "authState": "import { InjectionToken, signal } from '@angular/core';\n\nexport interface AuthState {\n  accessToken: ReturnType<typeof signal<string | null>>;\n  user: ReturnType<typeof signal<{ id: string; roles: string[] } | null>>;\n  isAuthenticated: () => boolean;\n  hasRole: (role: string) => boolean;\n  setToken: (t: string | null) => void;\n  logoutLocal: () => void;\n  redirectToLogin: (returnUrl?: string) => void;\n  refresh: () => Promise<void>;\n}\n\nexport const AUTH_STATE = new InjectionToken<AuthState>('AUTH_STATE', {\n  providedIn: 'root',\n  factory: () => {\n    const accessToken = signal<string | null>(null);\n    const user = signal<{ id: string; roles: string[] } | null>(null);\n\n    return {\n      accessToken,\n      user,\n      isAuthenticated: () => !!accessToken(),\n      hasRole: (role: string) => !!user()?.roles?.includes(role),\n      setToken: (t) => accessToken.set(t),\n      logoutLocal: () => { accessToken.set(null); user.set(null); },\n      redirectToLogin: (returnUrl?: string) => { window.location.href = `/login?returnUrl=${encodeURIComponent(returnUrl || '/')}`; },\n      refresh: async () => { /* call /auth/refresh (HttpOnly cookie), then set accessToken */ }\n    };\n  }\n});",
+    "widgetToken": "import { InjectionToken, Type } from '@angular/core';\nexport interface WidgetDef { id: string; title: string; component: Type<any>; roles?: string[]; }\nexport const DASHBOARD_WIDGETS = new InjectionToken<WidgetDef[]>('DASHBOARD_WIDGETS', {\n  providedIn: 'root',\n  factory: () => []\n});",
+    "signalsVsBs": "import { signal, computed } from '@angular/core';\nconst items = signal<number[]>([]);\nconst count = computed(() => items().length);\nfunction add(n: number) { items.update(a => [...a, n]); }",
+    "routes": "import { Routes } from '@angular/router';\nimport { authGuard } from './core/auth.guard';\nexport const routes: Routes = [\n  { path: '', loadComponent: () => import('./features/public/home/home.component').then(m => m.HomeComponent), title: 'Home' },\n  { path: 'admin', canMatch: [authGuard], loadComponent: () => import('./features/admin/admin-shell.component').then(m => m.AdminShellComponent), title: 'Admin' },\n  { path: '**', redirectTo: '' }\n];"
+  }
 }

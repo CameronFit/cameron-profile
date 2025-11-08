@@ -9,15 +9,18 @@
 <mat-sidenav-container
   class="app-container"
   [class.collapsed]="collapsed()"
+  [hasBackdrop]="isMobile()"
   autosize
 >
   <mat-sidenav
+    #sidenav
     class="app-sidenav"
-    mode="side"
+    [mode]="isMobile() ? 'over' : 'side'"
     position="start"
-    [opened]="true"
+    [opened]="!isMobile() || !collapsed()"
+    (closed)="collapsed.set(true)"
   >
-    <app-custom-sidenav [collapsed]="collapsed()"></app-custom-sidenav>
+    <app-custom-sidenav [collapsed]="isMobile() ? false : collapsed()"></app-custom-sidenav>
   </mat-sidenav>
 
   <mat-sidenav-content class="app-content">
