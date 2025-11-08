@@ -1,4 +1,4 @@
-@import '../../../../styles/responsive';
+@import "../../../../styles/responsive";
 
 :host {
   display: block;
@@ -7,9 +7,14 @@
 }
 
 .profile-container {
-  /* full-width layout to match resume component */
+  /* keep the full-width look on desktop */
   height: 100%;
   padding: 0;
+
+  // Add breathing room on mobile
+  @include media-breakpoint-down(sm) {
+    padding: 0 var(--spacing-3) var(--spacing-4);
+  }
 }
 
 // ============================================================================
@@ -19,7 +24,11 @@
 .hero-section {
   margin-bottom: var(--spacing-8);
   padding: var(--spacing-6);
-  background: linear-gradient(135deg, var(--surface-2) 0%, var(--surface-3) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--surface-2) 0%,
+    var(--surface-3) 100%
+  );
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-2);
   animation: slideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -43,17 +52,17 @@
 }
 
 .hero-image {
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
+  width: 100%;
+  max-width: 420px; // adjusts nicely in layout
+  height: auto;
+  border-radius: var(--radius-md); // soft corners, not a circle
   object-fit: cover;
   box-shadow: var(--shadow-2);
-  border: 4px solid var(--primary);
+  border: 3px solid var(--border-weak);
   animation: fadeIn 0.6s ease-out;
 
   @include media-breakpoint-down(sm) {
-    width: 140px;
-    height: 140px;
+    max-width: 100%;
   }
 }
 
@@ -176,7 +185,7 @@
     gap: var(--spacing-2);
 
     &::before {
-      content: '✓';
+      content: "✓";
       color: var(--primary);
       font-weight: bold;
       font-size: var(--fs-base);
@@ -400,7 +409,11 @@
 .cta-section {
   text-align: center;
   padding: var(--spacing-6);
-  background: linear-gradient(135deg, var(--primary-container) 0%, rgba(0, 166, 126, 0.1) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--primary-container) 0%,
+    transparent 100%
+  );
   border-radius: var(--radius-lg);
   border: 1px solid var(--primary);
 
@@ -439,7 +452,7 @@
   }
 
   &:hover {
-    background: darken(#00a67e, 5%);
+    background: var(--primary-hover);
     box-shadow: var(--shadow-2);
     transform: translateY(-2px);
   }

@@ -134,7 +134,7 @@
   align-items: center;
   gap: var(--spacing-2);
   padding: var(--spacing-4);
-  background: rgba(0, 166, 126, 0.1);
+  background: var(--primary-container);
   border: 1px solid var(--primary);
   border-radius: var(--radius-md);
   color: var(--primary);
@@ -303,7 +303,7 @@
   }
 
   &:hover {
-    background: rgba(0, 166, 126, 0.1);
+    background: var(--primary-container);
     border-color: var(--primary);
     transform: translateX(4px);
 

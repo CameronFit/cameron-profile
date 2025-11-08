@@ -1,4 +1,4 @@
-@import '../../../styles/responsive';
+@import "../../../styles/responsive";
 
 /* Top bar */
 .app-toolbar {
@@ -15,7 +15,9 @@
     padding: 0 var(--spacing-2);
   }
 
-  .spacer { flex: 1; }
+  .spacer {
+    flex: 1;
+  }
 }
 
 /* Container */
@@ -63,22 +65,24 @@
     min-width: var(--nav-width);
     max-width: var(--nav-width);
   }
+
   .app-container .mat-drawer-content {
     margin-left: var(--nav-width);
   }
 
-  /* Collapsed */
+  /* Collapsed rail */
   .app-container.collapsed .mat-drawer {
     width: var(--nav-width-collapsed);
     min-width: var(--nav-width-collapsed);
     max-width: var(--nav-width-collapsed);
   }
+
   .app-container.collapsed .mat-drawer-content {
     margin-left: var(--nav-width-collapsed);
   }
 }
 
-/* Mobile navigation */
+/* Mobile / small-screen navigation */
 @include media-breakpoint-down(sm) {
   .app-container {
     position: relative;
@@ -91,13 +95,14 @@
       min-width: auto;
       transform: none;
     }
-    
+
     .mat-drawer-content,
     &.collapsed .mat-drawer-content {
       margin-left: 0;
     }
   }
 }
+
 .app-container .mat-drawer,
 .app-container .mat-drawer-content {
   transition: margin 250ms ease, width 250ms ease;

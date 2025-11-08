@@ -5,7 +5,6 @@
   <span class="spacer"></span>
 </mat-toolbar>
 
-<!-- Bind the collapsed state as a class -->
 <mat-sidenav-container
   class="app-container"
   [class.collapsed]="collapsed()"
@@ -20,7 +19,11 @@
     [opened]="!isMobile() || !collapsed()"
     (closed)="collapsed.set(true)"
   >
-    <app-custom-sidenav [collapsed]="isMobile() ? false : collapsed()"></app-custom-sidenav>
+    <!-- On mobile the sidenav content is always "expanded" when open.
+         On desktop, collapsed() drives the compact rail state. -->
+    <app-custom-sidenav
+      [collapsed]="isMobile() ? false : collapsed()"
+    ></app-custom-sidenav>
   </mat-sidenav>
 
   <mat-sidenav-content class="app-content">

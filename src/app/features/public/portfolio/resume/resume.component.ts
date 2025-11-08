@@ -4,8 +4,7 @@ import {
   computed,
   inject,
   signal,
-  OnInit,
-  OnDestroy
+  effect
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
@@ -16,7 +15,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { DOCS_CONFIG } from '../../../../core/tokens/docs.token';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Subject, takeUntil } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 type DocKind = 'resume' | 'cover';
 
@@ -34,39 +33,28 @@ type DocKind = 'resume' | 'cover';
   styleUrls: ['./resume.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ResumeComponent implements OnInit, OnDestroy {
+export class ResumeComponent {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly cfg = inject(DOCS_CONFIG);
   private readonly sanitizer = inject(DomSanitizer);
   private readonly breakpointObserver = inject(BreakpointObserver);
-  private readonly destroy$ = new Subject<void>();
-
   readonly isMobile = signal(false);
-
-  ngOnInit() {
-    // Monitor screen size changes
-    this.breakpointObserver
-      .observe([Breakpoints.HandsetPortrait])
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(result => {
-        this.isMobile.set(result.matches);
-      });
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
+  constructor() {
+    const handset = toSignal(
+      this.breakpointObserver.observe([Breakpoints.HandsetPortrait]),
+      { initialValue: { matches: false, breakpoints: {} } }
+    );
+    effect(() => this.isMobile.set(!!handset()?.matches));
+    // Read the initial query param once on construct (no subscription needed for this case)
+    const qp = this.route.snapshot.queryParamMap.get('doc') as DocKind | null;
+    if (qp === 'cover' || qp === 'resume') this.doc.set(qp);
   }
 
   // Which doc are we showing? Default to 'resume'; sync with ?doc=cover|resume
   readonly doc = signal<DocKind>('resume');
 
-  constructor() {
-    // Read the initial query param once on construct (no subscription needed for this case)
-    const qp = this.route.snapshot.queryParamMap.get('doc') as DocKind | null;
-    if (qp === 'cover' || qp === 'resume') this.doc.set(qp);
-  }
+  // moved query param handling into constructor above
 
   // Is résumé showing?
   readonly isResume = () => this.doc() === 'resume';

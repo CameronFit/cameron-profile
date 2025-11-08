@@ -3,6 +3,7 @@
   "title": "Angular Front-End Engineer | .NET Integration Specialist",
   "intro": "I’m an Angular-focused front-end developer with a passion for clean architecture and polished UX. I build scalable, testable apps using modern Angular patterns: standalone components, signals, typed forms, and Material M3.",
   "avatar": "/assets/cam-profile.jpeg",
+  "profile_pic": "/assets/cameron.jpeg",
   "skills": [
     {
       "category": "Frontend",
