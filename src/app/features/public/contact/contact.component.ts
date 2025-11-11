@@ -59,7 +59,7 @@ export class ContactComponent {
 
   readonly socialLinks = computed(() => [
     { icon: 'fa-linkedin', label: 'LinkedIn', url: 'https://linkedin.com' },
-    { icon: 'fa-github', label: 'GitHub', url: 'https://github.com' },
+    // { icon: 'fa-github', label: 'GitHub', url: 'https://github.com' },
   ]);
 
   private readonly breakpointObserver = inject(BreakpointObserver);
