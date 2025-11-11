@@ -6,10 +6,6 @@ import { AUTH_STATE, User } from '../tokens/auth-state.token';
 export class AuthApiService {
   private auth = inject(AUTH_STATE);
 
-  /**
-   * Called by APP_INITIALIZER before first paint.
-   * Simulates restoring a session (front-end demo).
-   */
   async refreshOnStartup(): Promise<void> {
     // Simulate a small async call (e.g., /auth/refresh)
     await new Promise(res => setTimeout(res, 120));
@@ -18,7 +14,7 @@ export class AuthApiService {
     const demoUser: User = {
       id: 'u1',
       name: 'Cameron Young',
-      roles: ['public'] // add 'admin' if you want to show admin routes
+      roles: ['public']
     };
 
     this.auth.accessToken.set('demo-access-token');

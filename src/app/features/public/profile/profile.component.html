@@ -3,7 +3,12 @@
     <!-- Hero Section -->
     <section class="hero-section">
       <div class="hero-content">
-  <img [src]="p.avatar" alt="{{ p.name }}" title="{{ p.name }}" class="hero-image" />
+        <img
+          [src]="p.profile_pic"
+          alt="{{ p.name }}"
+          title="{{ p.name }}"
+          class="hero-image"
+        />
         <div class="hero-text">
           <h1>{{ p.name }}</h1>
           <p class="subtitle">{{ p.title }}</p>
@@ -48,9 +53,6 @@
       </div>
     </section>
 
-
-
-    <!-- CTA Section -->
     <section class="cta-section">
       <h2>Let's Work Together</h2>
       <p>Interested in collaborating? Let's get in touch!</p>

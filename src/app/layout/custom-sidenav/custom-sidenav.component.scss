@@ -163,20 +163,20 @@
 
   // Hover state
   &:hover {
-    background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(255,255,255,0.04) 100%);
+    background: linear-gradient(90deg, rgba(0,0,0,0) 0%, var(--hover-bg) 100%);
     color: var(--text);
   }
 
   // Active state - Yellow left border like YouTube
   &.active {
-    background: rgba(255, 255, 255, 0.06);
-    color: var(--sidenav-left);
-    border-left-color: var(--sidenav-left);
+    background: var(--surface-3);
+    color: var(--nav-active-border);
+    border-left-color: var(--nav-active-border);
     font-weight: 600;
 
     .nav-icon,
     .material-symbols-outlined {
-      color: var(--sidenav-left);
+      color: var(--nav-active-border);
       font-variation-settings: "FILL" 1, "wght" 600, "GRAD" 0, "opsz" 24;
     }
   }
@@ -217,7 +217,7 @@
       display: none;
     }
 
-    &.active { background: rgba(255,255,255,0.06); }
+    &.active { background: var(--surface-3); }
   }
 }
 
@@ -262,7 +262,7 @@
 .material-symbols-outlined.active {
   font-variation-settings: "FILL" 1, /* filled */ "wght" 500, "GRAD" 0,
     "opsz" 24;
-  color: var(--accent, #f5e342);
+  color: var(--accent);
 }
 
 /* Make mat-icon actually use Material Symbols (overrides Angular Material default) */

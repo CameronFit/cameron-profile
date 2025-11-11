@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, signal, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal, computed, effect, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-contact',
@@ -24,7 +25,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
   styleUrls: ['./contact.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ContactComponent implements OnInit {
+export class ContactComponent {
   contactForm!: FormGroup;
   readonly isSubmitting = signal(false);
   readonly submitSuccess = signal(false);
@@ -56,19 +57,17 @@ export class ContactComponent implements OnInit {
     { icon: 'fa-github', label: 'GitHub', url: 'https://github.com' },
   ]);
 
-  constructor(
-    private fb: FormBuilder,
-    private breakpointObserver: BreakpointObserver
-  ) {
+  private readonly breakpointObserver = inject(BreakpointObserver);
+  constructor(private fb: FormBuilder) {
     this.initForm();
-  }
-
-  ngOnInit(): void {
-    this.breakpointObserver
-      .observe([Breakpoints.Handset])
-      .subscribe(result => {
-        this.isMobile.set(result.matches);
-      });
+    const handset = toSignal(
+      this.breakpointObserver.observe([Breakpoints.Handset]),
+      { initialValue: { matches: false, breakpoints: {} } }
+    );
+    effect(() => {
+      const state = handset();
+      this.isMobile.set(!!state?.matches);
+    });
   }
 
   private initForm(): void {
