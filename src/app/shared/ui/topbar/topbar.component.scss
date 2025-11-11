@@ -1,11 +1,55 @@
-mat-toolbar {
+mat-toolbar.app-toolbar {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  height: var(--topbar-height);
+  background: var(--topbar-bg);
+  color: var(--text);
+  border-bottom: 1px solid var(--border-weak);
+  box-shadow: var(--shadow-1);
+  transition: background var(--transition-medium), color var(--transition-medium);
+
+  button[mat-icon-button] {
+    color: var(--text-dim);
+    transition: color var(--transition-fast), background var(--transition-fast);
+    &:hover {
+      background: var(--hover-bg);
+      color: var(--text);
+    }
+  }
+
   .brand {
     font-weight: 600;
-    font-size: 18px;
+    font-size: var(--fs-lg);
+    letter-spacing: .5px;
+    color: var(--text);
+    -webkit-user-select: none;
+    user-select: none;
   }
-  .spacer {
-    flex: 1;
+
+  a[mat-button] {
+    color: var(--text-dim);
+    font-size: var(--fs-base);
+    text-transform: none;
+    transition: color var(--transition-fast), background var(--transition-fast);
+    &:hover {
+      color: var(--text);
+      background: var(--hover-bg);
+    }
+    &.active-route {
+      color: var(--accent);
+      font-weight: 600;
+    }
+  }
+
+  .spacer { flex: 1; }
+
+  app-theme-toggle { margin-left: var(--spacing-2); }
+}
+
+/* Responsive improvements */
+@media (max-width: 720px) {
+  mat-toolbar.app-toolbar {
+    a[mat-button] { display: none; }
+    .brand { font-size: var(--fs-md); }
   }
 }

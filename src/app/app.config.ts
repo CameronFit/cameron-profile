@@ -1,18 +1,12 @@
 // src/app/app.config.ts
-import { ApplicationConfig, APP_INITIALIZER, inject, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { routes } from './app.routes';
 
 import { authInterceptor } from './core/interceptors/auth.interceptor';
-import { AuthApiService } from './core/services/auth-api.service';
-
-// Factory to run before first render
-function appInit() {
-  const auth = inject(AuthApiService);
-  return () => auth.refreshOnStartup(); // returns Promise<void>
-}
+import { APP_INIT_PROVIDERS } from './core/initializers/app-init';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -20,6 +14,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideAnimations(),
     provideHttpClient(withInterceptors([authInterceptor])),
-    { provide: APP_INITIALIZER, multi: true, useFactory: appInit },
+    APP_INIT_PROVIDERS
   ],
 };

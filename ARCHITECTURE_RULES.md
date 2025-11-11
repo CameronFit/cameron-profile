@@ -21,53 +21,122 @@ Copy the whole file and feed it to the assistant/Copilot at the start of a sessi
 1. ### OnPush Change Detection Required
 
    - All components MUST use `changeDetection: ChangeDetectionStrategy.OnPush`.
-   - Rely on **signals, inputs, and outputs/events** for updates.
-   - Avoid manual change detection triggers (`ChangeDetectorRef.detectChanges` / `markForCheck`) unless there is a very specific performance reason.
+   - Rely on signals, inputs, and events for updates.
+   - Avoid manual change detection triggers.
+2. Signals for component state
+   - Use `signal`, `computed`, and `effect` for component/local state.
+   - Avoid `subscribe()` in components. If you need to convert a stream to signals, do it in a service and expose signals or plain values.
+3. Standalone components only
+   - Prefer `standalone: true` and import required modules directly on the component.
+4. InjectionTokens for global config & state
+   - Use `InjectionToken` with a factory when sensible (see `src/app/core/tokens` for examples).
+   - Tokens like `DOCS_CONFIG`, `AUTH_STATE`, or `APP_CONFIG` should be used instead of globals.
+5. Feature-first file layout
+   - Each feature owns its UI and logic. Keep shared primitives in `src/app/shared` and cross-cutting concerns in `src/app/core`.
+6. No business logic in templates
+   - Templates should remain declarative; move logic to component class or services.
+7. No inline styles
+   - All styles must use global tokens from `src/styles/_tokens.scss`.
+   - Component styles must be in separate SCSS files.
+   - No style attributes in templates.
 
-2. ### Signals for Component State
+---
 
-   - Use `signal`, `computed`, and `effect` for **local/component state**.
-   - Services can expose signals or plain values; components consume them.
-   - Avoid `subscribe()` in components. If you need to convert a stream to signals, use:
-     - `toSignal(observable$)` **in a service**, or
-     - an `effect` that updates signals.
-   - RxJS is still allowed in services for HTTP, composition, and side effects.
+## 🔑 Application Bootstrap & APP_INITIALIZER Pattern
 
-3. ### Standalone Components Only
+### Purpose
+Use `APP_INITIALIZER` to run startup logic **before** Angular renders anything.
 
-   - All UI components must be `standalone: true`.
-   - Import all Angular Material / Router / Common modules **directly in the component**.
-   - No legacy NgModules for new code.
+Typical uses:
+- Silent session refresh via HttpOnly cookie
+- Loading app config / feature flags
+- Preloading user profile or language packs
 
-4. ### InjectionTokens for Global Config & State
+### Boot order overview
+1. CLI builds the bundle (`angular.json`)
+2. Browser loads `index.html` → executes `main.ts`
+3. Angular builds the DI container
+4. `APP_INITIALIZER` runs (startup jobs)
+5. AppComponent bootstraps
+6. Router + Guards run
+7. Components and interceptors operate normally
 
-   - Use `InjectionToken` with a factory for global config and long-lived state.
-   - Examples: `DOCS_CONFIG`, `AUTH_STATE`, `APP_CONFIG`, `PORTFOLIO_CONTENT_CONFIG`.
-   - Prefer tokens over global singletons for:
-     - base URLs,
-     - environment configuration,
-     - app-level state objects (auth, docs, static content config).
-   - Tokens must live under `src/app/core/tokens`.
+### Folder structure
+```
+src/app/core/
+  initializers/
+    app-init.ts          # Main APP_INITIALIZER provider
+    session-init.ts      # Session refresh logic
+  tokens/
+    app-config.token.ts  # Global config InjectionToken
+```
 
-5. ### Feature-First File Layout
+### Example: Session refresh initializer
 
-   - Each feature owns its UI & logic under `src/app/features/<feature-name>`.
-   - Shared primitives (buttons, cards, layout helpers) live under `src/app/shared`.
-   - Cross-cutting concerns (interceptors, tokens, guards, services, util functions) live under `src/app/core`.
-   - Layout primitives (`Shell`, `Header`, `CustomSidenav`) live under `src/app/layout`.
+**src/app/core/initializers/session-init.ts**
+```typescript
+import { inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { AUTH_STATE } from '../tokens/auth-state.token';
+import { firstValueFrom } from 'rxjs';
 
-6. ### No Business Logic in Templates
+export function initializeSession() {
+  const http = inject(HttpClient);
+  const auth = inject(AUTH_STATE);
 
-   - Templates should remain **declarative**.
-   - Move conditionals, mapping, and branching into the component or service.
-   - Only simple pipes/structural directives are allowed in the template.
+  return async () => {
+    try {
+      // Attempt silent refresh using HttpOnly cookie
+      const response = await firstValueFrom(
+        http.post<{ accessToken: string; user: any }>('/api/auth/refresh', {})
+      );
+      auth.accessToken.set(response.accessToken);
+      auth.user.set(response.user);
+    } catch {
+      // Session expired or not authenticated; continue as guest
+      console.log('[Session Init] No active session');
+    }
+  };
+}
+```
 
-7. ### No Inline Styles
-   - **No `style=` attributes** or inline `<style>` blocks in components.
-   - All component styles must be in separate SCSS files.
-   - All colors, spacing, radii, and shadows must use global tokens from:
-     - `src/styles/_tokens.scss`
-     - `src/styles/theme.scss` (Material theme)
+**src/app/core/initializers/app-init.ts**
+```typescript
+import { APP_INITIALIZER, Provider } from '@angular/core';
+import { initializeSession } from './session-init';
+
+export const APP_INIT_PROVIDERS: Provider[] = [
+  {
+    provide: APP_INITIALIZER,
+    useFactory: initializeSession,
+    multi: true
+  }
+];
+```
+
+**src/app/app.config.ts**
+```typescript
+import { ApplicationConfig } from '@angular/core';
+import { provideRouter } from '@angular/router';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { routes } from './app.routes';
+import { APP_INIT_PROVIDERS } from './core/initializers/app-init';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideRouter(routes),
+    provideHttpClient(withInterceptors([...])),
+    APP_INIT_PROVIDERS
+  ]
+};
+```
+
+### Key rules
+- Return a **Promise** or **Observable** from the factory function
+- Angular waits for all `APP_INITIALIZER` to complete before bootstrapping
+- Use `inject()` inside factory for DI (modern syntax)
+- Keep initializers focused: one concern per initializer
+- Place in `src/app/core/initializers/`
 
 ---
 

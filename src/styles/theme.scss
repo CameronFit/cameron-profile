@@ -24,4 +24,62 @@ $cameron-profile-theme: mat.define-theme((
 
   /* Optional: apply system-level typography to native elements */
   @include mat.system-level-typography($cameron-profile-theme);
+
+  /* Bridge Material CSS variables to our design tokens so theme toggle updates components */
+  /* Toolbar */
+  --mat-toolbar-container-background-color: var(--topbar-bg);
+  --mat-toolbar-container-text-color: var(--text);
+
+  /* Form fields (MDC filled and outlined) */
+  --mdc-filled-text-field-container-color: var(--surface-2);
+  --mdc-filled-text-field-label-text-color: var(--text-dim);
+  --mdc-filled-text-field-input-text-color: var(--text);
+  --mdc-filled-text-field-caret-color: var(--accent);
+  --mdc-filled-text-field-active-indicator-color: var(--border);
+  --mdc-filled-text-field-hover-active-indicator-color: var(--border);
+  --mdc-filled-text-field-focus-active-indicator-color: var(--accent);
+  --mdc-filled-text-field-disabled-container-color: var(--surface-3);
+  --mdc-filled-text-field-disabled-container-opacity: 1;
+
+  --mdc-outlined-text-field-label-text-color: var(--text-dim);
+  --mdc-outlined-text-field-input-text-color: var(--text);
+  --mdc-outlined-text-field-caret-color: var(--accent);
+  --mdc-outlined-text-field-outline-color: var(--border);
+  --mdc-outlined-text-field-hover-outline-color: var(--border);
+  --mdc-outlined-text-field-focus-outline-color: var(--accent);
+
+  /* Generic text & icon colors */
+  --mat-option-label-text-color: var(--text);
+  --mat-select-enabled-trigger-text-color: var(--text);
+  --mat-form-field-container-text-color: var(--text);
+  --mat-form-field-container-underline-color: var(--border);
+  --mat-form-field-container-text-start: var(--text);
+
+  /* Select panel & options */
+  --mat-select-panel-background-color: var(--surface-2);
+  --mat-select-panel-foreground-color: var(--text);
+  --mat-select-enabled-arrow-color: var(--text-dim);
+  --mat-select-focused-arrow-color: var(--accent);
+  --mat-select-panel-border-color: var(--border);
+  --mat-select-panel-placeholder-color: var(--text-dim);
+  --mat-select-option-selected-state-label-text-color: var(--accent);
+  --mat-select-option-label-text-color: var(--text);
+  --mat-select-option-hover-state-layer-color: var(--hover-bg);
+  --mat-select-option-focus-state-layer-color: var(--hover-bg-strong);
+}
+
+/* Light theme overrides where necessary (ensure select panel stays light) */
+:root[data-theme="light"] {
+  --mat-select-panel-background-color: var(--surface-2);
+  --mat-select-panel-foreground-color: var(--text);
+  --mat-select-enabled-arrow-color: var(--text-dim);
+  --mat-select-focused-arrow-color: var(--accent);
+  --mat-select-option-selected-state-label-text-color: var(--accent);
+  --mat-select-option-label-text-color: var(--text);
+}
+
+/* Optional: high-contrast focus ring for keyboard nav */
+.cdk-focused .mat-mdc-select-panel, .mat-mdc-select-panel:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
