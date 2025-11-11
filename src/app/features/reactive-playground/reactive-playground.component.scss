@@ -1,0 +1,62 @@
+@import '../../../styles/responsive';
+
+:host {
+  display: block;
+  min-height: 100vh;
+  background: var(--surface-bg);
+  color: var(--text);
+}
+
+.rp-hero {
+  text-align: center;
+  padding: var(--spacing-8) var(--spacing-6) var(--spacing-7);
+  background: linear-gradient(135deg, rgba(0, 166, 126, 0.08) 0%, transparent 50%);
+  border-bottom: 1px solid var(--border-weak);
+
+  h1 {
+    margin: 0 0 var(--spacing-4) 0;
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, var(--text) 0%, var(--text-weak) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+
+    @include media-breakpoint-down(sm) {
+      font-size: 32px;
+    }
+  }
+
+  .rp-lead {
+    margin: 0 auto;
+    max-width: 52rem;
+    font-size: var(--fs-lg);
+    color: var(--text-dim);
+    line-height: 1.7;
+    font-weight: 400;
+  }
+}
+
+.rp-grid {
+  display: grid;
+  gap: var(--spacing-6);
+  grid-template-columns: 1fr;
+  padding: var(--spacing-7) var(--spacing-6);
+  max-width: 1600px;
+  margin: 0 auto;
+
+  @include media-breakpoint-up(md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include media-breakpoint-up(xl) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @include media-breakpoint-down(sm) {
+    gap: var(--spacing-5);
+    padding: var(--spacing-5) var(--spacing-4);
+  }
+}

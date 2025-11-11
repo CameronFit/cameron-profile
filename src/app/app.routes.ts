@@ -27,6 +27,13 @@ export const routes: Routes = [
       ),
   },
 
+  {
+    path: 'reactive-playground',
+    loadChildren: () =>
+      import('./features/reactive-playground/reactive-playground.routes')
+        .then(m => m.REACTIVE_PLAYGROUND_ROUTES),
+  },
+
   // Wildcard fallback
   { path: '**', redirectTo: 'profile' },
 ];

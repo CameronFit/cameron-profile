@@ -1,0 +1,57 @@
+<mat-card class="rp-card">
+  <mat-card-header>
+    <div mat-card-avatar>
+      <mat-icon>search</mat-icon>
+    </div>
+    <mat-card-title>Smart Search Box</mat-card-title>
+    <mat-card-subtitle>Waits for you to pause typing before searching.</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="rp-card-body">
+      <app-search-input
+        label="Search names"
+        placeholder="Type to search..."
+        [formControl]="searchControl"
+      ></app-search-input>
+
+      <div class="rp-results">
+        @if (isLoading()) {
+          <div class="rp-loading">
+            <mat-progress-spinner diameter="32"></mat-progress-spinner>
+            <span>Searching...</span>
+          </div>
+        } @else if (results().length > 0) {
+          <mat-list>
+            @for (result of results(); track result) {
+              <mat-list-item>
+                <mat-icon matListItemIcon>person</mat-icon>
+                <span matListItemTitle>{{ result }}</span>
+              </mat-list-item>
+            }
+          </mat-list>
+        } @else if (hasTerm && results().length === 0) {
+          <div class="rp-empty">
+            <mat-icon>search_off</mat-icon>
+            <span>No results found</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="rp-details">
+      <h5>What you see</h5>
+      <p>
+        The search waits for you to pause typing before showing results. This prevents
+        unnecessary API calls while you're still typing.
+      </p>
+      
+      <h5>What's under the hood</h5>
+      <p>
+        RxJS operators like debounceTime() and switchMap() handle the timing and cancellation
+        of search requests automatically. The reusable <code>SearchInputComponent</code> 
+        uses ControlValueAccessor to integrate seamlessly with reactive forms.
+      </p>
+    </div>
+  </mat-card-content>
+</mat-card>

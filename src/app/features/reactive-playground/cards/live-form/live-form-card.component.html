@@ -1,0 +1,81 @@
+<mat-card class="rp-card">
+  <mat-card-header>
+    <div mat-card-avatar>
+      <mat-icon>rule</mat-icon>
+    </div>
+    <mat-card-title>Live Form Checker</mat-card-title>
+    <mat-card-subtitle>Watch the rules update as you type.</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="rp-card-body">
+      <form [formGroup]="form" class="rp-form" (ngSubmit)="submitDemo()">
+        <app-text-input
+          label="Name"
+          placeholder="Your name"
+          formControlName="name"
+        ></app-text-input>
+
+        <app-text-input
+          label="Email"
+          type="email"
+          placeholder="your@email.com"
+          formControlName="email"
+        ></app-text-input>
+
+        <app-text-input
+          label="Password"
+          type="password"
+          placeholder="Password"
+          formControlName="password"
+        ></app-text-input>
+
+        <button
+          mat-flat-button
+          color="primary"
+          type="submit"
+          [disabled]="!canSubmit"
+        >
+          Submit Form
+        </button>
+      </form>
+
+      <div class="rp-checklist">
+        <h4>Requirements</h4>
+        <ul>
+          <li [class.ok]="nameValid">
+            <mat-icon>{{ nameValid ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+            <span>Name is at least 2 characters</span>
+          </li>
+          <li [class.ok]="emailValid">
+            <mat-icon>{{ emailValid ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+            <span>Email looks valid</span>
+          </li>
+          <li [class.ok]="passwordMinValid">
+            <mat-icon>{{ passwordMinValid ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+            <span>Password has at least 8 characters</span>
+          </li>
+          <li [class.ok]="passwordSpecialCharValid">
+            <mat-icon>{{ passwordSpecialCharValid ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+            <span>Password contains a special character</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="rp-details">
+      <h5>What you see</h5>
+      <p>
+        As you type in the form fields, the checkmarks update instantly. The submit button
+        becomes enabled only when all validation rules pass.
+      </p>
+      
+      <h5>What's under the hood</h5>
+      <p>
+        Angular reactive forms with built-in validators automatically track field state.
+        Change detection triggers UI updates without manual DOM manipulation. The reusable
+        <code>TextInputComponent</code> uses ControlValueAccessor pattern for seamless form integration.
+      </p>
+    </div>
+  </mat-card-content>
+</mat-card>

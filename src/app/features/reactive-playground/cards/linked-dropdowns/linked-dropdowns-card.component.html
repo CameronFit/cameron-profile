@@ -1,0 +1,47 @@
+<mat-card class="rp-card">
+  <mat-card-header>
+    <div mat-card-avatar>
+      <mat-icon>public</mat-icon>
+    </div>
+    <mat-card-title>Linked Dropdowns</mat-card-title>
+    <mat-card-subtitle>One choice updates the next.</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="rp-card-body">
+      <div class="rp-select-row">
+        <app-select-input
+          label="Country"
+          [options]="countries()"
+          [formControl]="countryControl"
+        ></app-select-input>
+
+        <app-select-input
+          label="City"
+          [options]="availableCities()"
+          [disabled]="!availableCities().length"
+          [formControl]="cityControl"
+        ></app-select-input>
+      </div>
+
+      <div class="rp-summary">
+        {{ selectedSummary() }}
+      </div>
+    </div>
+
+    <div class="rp-details">
+      <h5>What you see</h5>
+      <p>
+        When you select a country, the city dropdown immediately updates with cities from
+        that country. The summary text changes as you make selections.
+      </p>
+      
+      <h5>What's under the hood</h5>
+      <p>
+        Angular signals and computed() make one field react to changes in another.
+        No manual event handling or state synchronization needed. The reusable 
+        <code>SelectInputComponent</code> uses ControlValueAccessor for clean integration.
+      </p>
+    </div>
+  </mat-card-content>
+</mat-card>

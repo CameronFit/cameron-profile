@@ -1,0 +1,13 @@
+.theme-toggle {
+  color: var(--text);
+  transition: all var(--transition-fast);
+
+  &:hover {
+    color: var(--primary);
+    transform: rotate(20deg);
+  }
+
+  mat-icon {
+    transition: transform var(--transition-medium);
+  }
+}

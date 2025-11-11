@@ -1,7 +1,10 @@
 /* Design Tokens (CSS custom properties)
    Keep these surface-level and stable. SCSS maps can be added later for themes.
 */
-:root {
+
+/* Dark Theme (Default) */
+:root,
+:root[data-theme="dark"] {
   /* Layout */
   --topbar-height: 64px;
   --nav-width: 250px;
@@ -73,4 +76,30 @@
   --radius-lg: 16px;
   --shadow-1: 0 1px 2px rgba(0,0,0,.25);
   --shadow-2: 0 6px 16px rgba(0,0,0,.35);
+}
+
+/* Light Theme */
+:root[data-theme="light"] {
+  /* Surfaces */
+  --topbar-bg: #ffffff;
+  --sidenav-bg: #f8f9fa;
+  --surface-bg: #ffffff;
+  --surface-2: #f5f5f5; /* slightly raised */
+  --surface-3: #eeeeee; /* more raised */
+
+  /* Text */
+  --text: #1a1a1a;
+  --text-dim: #5f6368;
+  --text-weak: #80868b;
+
+  /* Accents / Borders */
+  --border-weak: #e0e0e0;
+  --border: #d0d0d0;
+  --hover-bg: rgba(0, 0, 0, 0.04);
+  --hover-bg-strong: rgba(0, 0, 0, 0.08);
+  --primary-container: rgba(0, 166, 126, 0.08);
+
+  /* Shadows for light theme */
+  --shadow-1: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.06);
+  --shadow-2: 0 10px 25px rgba(0,0,0,.1), 0 4px 10px rgba(0,0,0,.06);
 }

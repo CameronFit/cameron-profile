@@ -6,7 +6,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatRippleModule } from '@angular/material/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSelectModule } from '@angular/material/select';
+
 
 export const MATERIAL = [
   MatCardModule,
@@ -16,7 +24,13 @@ export const MATERIAL = [
   MatListModule,
   MatDividerModule,
   MatProgressBarModule,
-  MatFormField,
-  MatLabel,
+  MatFormFieldModule,
+  MatInputModule,
+  MatToolbarModule,
+  MatSidenavModule,
+  MatTooltipModule,
+  MatRippleModule,
+  MatProgressSpinnerModule,
+  MatSelectModule,
 
 ];

@@ -1,9 +1,4 @@
-<mat-toolbar class="app-toolbar mat-elevation-z3">
-  <button mat-icon-button (click)="toggle()" aria-label="Toggle navigation">
-    <mat-icon>{{ collapsed() ? 'menu_open' : 'menu' }}</mat-icon>
-  </button>
-  <span class="spacer"></span>
-</mat-toolbar>
+<app-topbar [collapsed]="collapsed()" (toggleNav)="toggle()"></app-topbar>
 
 <mat-sidenav-container
   class="app-container"

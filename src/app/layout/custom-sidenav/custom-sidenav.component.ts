@@ -9,6 +9,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatRippleModule } from '@angular/material/core';
+import { MATERIAL } from '../../shared/material/material';
 
 interface NavItem {
   label: string;
@@ -20,14 +21,7 @@ interface NavItem {
 @Component({
   selector: 'app-custom-sidenav',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterLink,
-    RouterLinkActive,
-    MatIconModule,
-    MatTooltipModule,
-    MatRippleModule,
-  ],
+  imports: [CommonModule, RouterLink, RouterLinkActive, MATERIAL],
   templateUrl: './custom-sidenav.component.html',
   styleUrls: ['./custom-sidenav.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -42,5 +36,6 @@ export class CustomSidenavComponent {
     { label: 'Profile', route: '/profile', icon: 'account_circle', query: {} },
     { label: 'Resume', route: '/resume', icon: 'article', query: {} },
     { label: 'Contact', route: '/contact', icon: 'mail', query: {} },
+    { label: 'Reactive Playground', route: '/reactive-playground', icon: 'science', query: {} },
   ]);
 }

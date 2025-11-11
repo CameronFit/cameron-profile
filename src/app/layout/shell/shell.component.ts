@@ -20,20 +20,18 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { CustomSidenavComponent } from '../custom-sidenav/custom-sidenav.component';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { filter, map } from 'rxjs';
+import { MATERIAL } from '../../shared/material/material';
+import { TopbarComponent } from '../../shared/ui/topbar/topbar.component';
 
 @Component({
   selector: 'app-shell',
   standalone: true,
   imports: [
-    CommonModule,
+     CommonModule,
     RouterOutlet,
-    MatSidenavModule,
-    MatListModule,
-    MatIconModule,
-    MatButtonModule,
-    MatTooltipModule,
-    MatToolbarModule,
+    MATERIAL,
     CustomSidenavComponent,
+    TopbarComponent,
   ],
   templateUrl: './shell.component.html',
   styleUrls: ['./shell.component.scss'],

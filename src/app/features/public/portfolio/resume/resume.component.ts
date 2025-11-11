@@ -16,6 +16,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { DOCS_CONFIG } from '../../../../core/tokens/docs.token';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { MATERIAL } from '../../../../shared/material/material';
 
 type DocKind = 'resume' | 'cover';
 
@@ -24,10 +25,7 @@ type DocKind = 'resume' | 'cover';
   standalone: true,
   imports: [
     CommonModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatIconModule,
-    MatTooltipModule,
+    MATERIAL,
   ],
   templateUrl: './resume.component.html',
   styleUrls: ['./resume.component.scss'],
