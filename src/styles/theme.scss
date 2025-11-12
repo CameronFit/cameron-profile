@@ -84,6 +84,85 @@ $cameron-profile-theme: mat.define-theme((
   
   --mdc-outlined-text-field-hover-outline-color: var(--text);
   --mdc-outlined-text-field-hover-label-text-color: var(--text);
+  
+  /* Button fixes for light theme - ensure primary buttons are visible */
+  --mdc-filled-button-container-color: var(--primary);
+  --mdc-filled-button-label-text-color: #ffffff;
+  --mdc-protected-button-container-color: var(--primary);
+  --mdc-protected-button-label-text-color: #ffffff;
+  
+  /* Raised button (mat-raised-button) with color="primary" */
+  --mat-protected-button-state-layer-color: var(--primary);
+  --mat-protected-button-ripple-color: rgba(255, 255, 255, 0.1);
+  --mat-protected-button-container-color: var(--primary);
+  --mat-protected-button-label-text-color: #ffffff;
+  --mat-protected-button-disabled-container-color: rgba(0, 0, 0, 0.12);
+  --mat-protected-button-disabled-label-text-color: rgba(0, 0, 0, 0.38);
+  
+  /* Additional Material button token overrides */
+  --mat-fab-foreground-color: #ffffff;
+  --mat-fab-state-layer-color: #ffffff;
+  
+  /* Ensure icons in buttons are white */
+  --mat-icon-color: inherit;
+}
+
+/* Light theme button explicit styles to override Material theming */
+:root[data-theme="light"] {
+  .mat-mdc-raised-button.mat-primary {
+    --mdc-protected-button-container-color: var(--primary) !important;
+    --mdc-protected-button-label-text-color: #ffffff !important;
+    background-color: var(--primary) !important;
+    color: #ffffff !important;
+    
+    /* Fix alignment and display */
+    .mat-mdc-button-touch-target {
+      background-color: var(--primary) !important;
+    }
+    
+    .mdc-button__label {
+      color: #ffffff !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+    }
+    
+    .mat-icon {
+      color: #ffffff !important;
+      display: inline-flex !important;
+    }
+    
+    span {
+      color: #ffffff !important;
+      display: inline-block !important;
+    }
+    
+    &:hover:not([disabled]) {
+      --mdc-protected-button-container-color: var(--primary) !important;
+      background-color: var(--primary) !important;
+      
+      .mat-icon {
+        color: #ffffff !important;
+      }
+      
+      span {
+        color: #ffffff !important;
+      }
+    }
+    
+    &[disabled] {
+      background-color: rgba(0, 0, 0, 0.12) !important;
+      color: rgba(0, 0, 0, 0.38) !important;
+      
+      .mat-icon {
+        color: rgba(0, 0, 0, 0.38) !important;
+      }
+      
+      span {
+        color: rgba(0, 0, 0, 0.38) !important;
+      }
+    }
+  }
 }
 
 /* Optional: high-contrast focus ring for keyboard nav */

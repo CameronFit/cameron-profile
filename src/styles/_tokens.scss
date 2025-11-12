@@ -12,7 +12,7 @@
 
   /* Surfaces */
   --topbar-bg: #121212;
-  --sidenav-bg: #101010;
+  --sidenav-bg: #121212;
   --surface-bg: #1a1a1a;
   --surface-2: #151515; /* slightly raised */
   --surface-3: #202020; /* more raised */
@@ -89,8 +89,8 @@
 /* Light Theme */
 :root[data-theme="light"] {
   /* Surfaces - Warm, inviting palette */
-  --topbar-bg: #ffffff;
-  --sidenav-bg: #f9fafb;
+  --topbar-bg: #e8eaed;
+  --sidenav-bg: #e8eaed;
   --surface-bg: linear-gradient(180deg, #fafbfc 0%, #f4f6f8 100%);
   --surface-2: #ffffff; /* crisp white for cards */
   --surface-3: #f8f9fb; /* subtle elevation */
