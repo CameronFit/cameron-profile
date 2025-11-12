@@ -1,0 +1,81 @@
+<mat-card class="demo-card">
+  <mat-card-header>
+    <mat-icon mat-card-avatar>cloud_sync</mat-icon>
+    <mat-card-title>API Polling</mat-card-title>
+    <mat-card-subtitle>Long-running job with status updates</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="polling-visual">
+      <div class="status-indicator" [attr.data-status]="pollingData().status">
+        <mat-icon class="status-icon">{{ statusIcon() }}</mat-icon>
+        <h3>{{ pollingData().status | uppercase }}</h3>
+      </div>
+
+      <div class="progress-section">
+        <mat-progress-bar 
+          [mode]="isPolling() ? 'determinate' : 'determinate'"
+          [value]="pollingData().progress"
+          [color]="statusColor()"
+        ></mat-progress-bar>
+        <div class="progress-info">
+          <span class="progress-text">{{ pollingData().progress }}%</span>
+          <span class="poll-count">Polls: {{ pollingData().pollCount }}</span>
+        </div>
+      </div>
+
+      <div class="message-box">
+        <mat-icon>info</mat-icon>
+        <p>{{ pollingData().message }}</p>
+      </div>
+    </div>
+
+    <div class="code-preview">
+      <pre><code>// Backend pattern: Poll every 2s until complete
+interval(2000).pipe(
+  switchMap(() => http.get('/api/job/status')),
+  takeWhile(status => status !== 'completed')
+)</code></pre>
+    </div>
+
+    <div class="rp-details">
+      <h5>What you see</h5>
+      <p>
+        Watch a simulated background job execute with real-time progress updates. 
+        The polling mechanism checks job status every 2 seconds, incrementing the poll counter 
+        and updating the progress bar until completion.
+      </p>
+      
+      <h5>What's under the hood</h5>
+      <p>
+        RxJS <code>interval(2000)</code> emits every 2 seconds, then <code>switchMap()</code> 
+        cancels any pending request and fetches fresh status. <code>takeWhile()</code> stops 
+        polling when the job completes. Signals track state with automatic change detection.
+      </p>
+    </div>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button 
+      mat-raised-button 
+      color="primary" 
+      (click)="startPolling()"
+      [disabled]="isPolling()"
+    >
+      <mat-icon>play_arrow</mat-icon>
+      Start Job
+    </button>
+    <button 
+      mat-button 
+      (click)="stopPolling()"
+      [disabled]="!isPolling()"
+    >
+      <mat-icon>stop</mat-icon>
+      Stop
+    </button>
+    <button mat-button (click)="reset()">
+      <mat-icon>refresh</mat-icon>
+      Reset
+    </button>
+  </mat-card-actions>
+</mat-card>

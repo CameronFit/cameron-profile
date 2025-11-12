@@ -11,7 +11,7 @@
     class="app-sidenav"
     [mode]="isMobile() ? 'over' : 'side'"
     position="start"
-    [opened]="!isMobile() || !collapsed()"
+    [opened]="isMobile() ? !collapsed() : true"
     (closed)="collapsed.set(true)"
   >
     <!-- On mobile the sidenav content is always "expanded" when open.

@@ -41,6 +41,14 @@
   --primary-container: rgba(0, 166, 126, 0.12);
   --primary-hover: #00976f; /* 5% darken of primary */
   --nav-active-border: var(--primary); /* active left border color for nav */
+  
+  /* Status colors */
+  --success: #4caf50;
+  --success-container: rgba(76, 175, 80, 0.12);
+  --error: #f44336;
+  --error-container: rgba(244, 67, 54, 0.12);
+  --warning: #ff9800;
+  --warning-container: rgba(255, 152, 0, 0.12);
 
   /* Sidenav active indicator */
   --sidenav-left: #00a67e; /* green to match app accent */
@@ -80,26 +88,37 @@
 
 /* Light Theme */
 :root[data-theme="light"] {
-  /* Surfaces */
+  /* Surfaces - Warm, inviting palette */
   --topbar-bg: #ffffff;
-  --sidenav-bg: #f8f9fa;
-  --surface-bg: #ffffff;
-  --surface-2: #f5f5f5; /* slightly raised */
-  --surface-3: #eeeeee; /* more raised */
+  --sidenav-bg: #f9fafb;
+  --surface-bg: linear-gradient(180deg, #fafbfc 0%, #f4f6f8 100%);
+  --surface-2: #ffffff; /* crisp white for cards */
+  --surface-3: #f8f9fb; /* subtle elevation */
 
-  /* Text */
-  --text: #1a1a1a;
-  --text-dim: #5f6368;
-  --text-weak: #80868b;
+  /* Text - Rich, readable hierarchy */
+  --text: #0f172a;
+  --text-dim: #475569;
+  --text-weak: #64748b;
 
-  /* Accents / Borders */
-  --border-weak: #e0e0e0;
-  --border: #d0d0d0;
-  --hover-bg: rgba(0, 0, 0, 0.04);
-  --hover-bg-strong: rgba(0, 0, 0, 0.08);
+  /* Accents / Borders - Refined with subtle color */
+  --accent: #00a67e;
+  --border-weak: #e2e8f0;
+  --border: #cbd5e1;
+  --hover-bg: rgba(0, 166, 126, 0.06);
+  --hover-bg-strong: rgba(0, 166, 126, 0.12);
+  --primary: #00a67e;
   --primary-container: rgba(0, 166, 126, 0.08);
+  --primary-hover: #00916f;
+  
+  /* Status colors - Vibrant and clear */
+  --success: #059669;
+  --success-container: rgba(5, 150, 105, 0.12);
+  --error: #dc2626;
+  --error-container: rgba(220, 38, 38, 0.12);
+  --warning: #d97706;
+  --warning-container: rgba(217, 119, 6, 0.12);
 
-  /* Shadows for light theme */
-  --shadow-1: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.06);
-  --shadow-2: 0 10px 25px rgba(0,0,0,.1), 0 4px 10px rgba(0,0,0,.06);
+  /* Shadows - Soft, layered depth */
+  --shadow-1: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.03);
+  --shadow-2: 0 4px 6px rgba(0,0,0,.04), 0 2px 4px rgba(0,0,0,.02), 0 12px 24px rgba(0,0,0,.06);
 }

@@ -14,6 +14,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatRippleModule } from '@angular/material/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTabsModule } from '@angular/material/tabs';
 
 
 export const MATERIAL = [
@@ -32,5 +33,6 @@ export const MATERIAL = [
   MatRippleModule,
   MatProgressSpinnerModule,
   MatSelectModule,
+  MatTabsModule,
 
 ];

@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -9,6 +9,16 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { MATERIAL } from '../../../../shared/material/material';
 import { TextInputComponent } from '../../../../shared/ui/form-controls/text-input/text-input.component';
+
+// Custom email validator with proper regex
+function emailValidator(control: AbstractControl): ValidationErrors | null {
+  if (!control.value) {
+    return null;
+  }
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const valid = emailRegex.test(control.value);
+  return valid ? null : { invalidEmail: true };
+}
 
 @Component({
   selector: 'app-live-form-card',
@@ -28,7 +38,7 @@ export class LiveFormCardComponent {
 
   readonly form = this.fb.nonNullable.group({
     name: ['', [Validators.required, Validators.minLength(2)]],
-    email: ['', [Validators.required, Validators.email]],
+    email: ['', [Validators.required, emailValidator]],
     password: ['', [Validators.required, Validators.minLength(8)]],
   });
 

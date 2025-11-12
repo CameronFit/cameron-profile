@@ -2,7 +2,7 @@
   <mat-toolbar class="bar">
     <button mat-button (click)="back()">
       <mat-icon>arrow_back</mat-icon>
-      Back
+      <span class="button-text">Back</span>
     </button>
 
     <span class="title">{{ currentDocLabel() }}</span>
@@ -10,20 +10,25 @@
 
     <!-- Switcher -->
     <button mat-stroked-button (click)="show('resume')" [disabled]="isResume()">
-      <mat-icon>description</mat-icon> Résumé
+      <mat-icon>description</mat-icon>
+      <span class="button-text">Résumé</span>
     </button>
     <button mat-stroked-button (click)="show('cover')" [disabled]="!isResume()">
-      <mat-icon>drafts</mat-icon> Cover Letter
+      <mat-icon>drafts</mat-icon>
+      <span class="button-text">Cover Letter</span>
     </button>
 
     <a mat-stroked-button [href]="plainUrl()" target="_blank" rel="noopener">
-      <mat-icon>open_in_new</mat-icon> Open
+      <mat-icon>open_in_new</mat-icon>
+      <span class="button-text">Open</span>
     </a>
     <a mat-button [href]="plainUrl()" download>
-      <mat-icon>download</mat-icon> Download
+      <mat-icon>download</mat-icon>
+      <span class="button-text">Download</span>
     </a>
     <button mat-button (click)="print()">
-      <mat-icon>print</mat-icon> Print
+      <mat-icon>print</mat-icon>
+      <span class="button-text">Print</span>
     </button>
   </mat-toolbar>
 

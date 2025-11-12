@@ -1,0 +1,200 @@
+@import '../../../../../styles/responsive';
+
+.demo-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-2);
+  border: 1px solid var(--border-weak);
+  box-shadow: var(--shadow-1);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: all var(--transition-medium);
+
+  &:hover {
+    border-color: var(--primary);
+    box-shadow: var(--shadow-2);
+    transform: translateY(-2px);
+  }
+
+  mat-card-header {
+    background: linear-gradient(135deg, var(--primary-container) 0%, transparent 100%);
+    padding: var(--spacing-4);
+    border-bottom: 1px solid var(--border-weak);
+
+    mat-icon[mat-card-avatar] {
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      padding: var(--spacing-2);
+      box-shadow: 0 2px 8px rgba(0, 166, 126, 0.2);
+    }
+  }
+}
+
+.rp-details {
+  border-top: 1px solid var(--border-weak);
+  padding-top: var(--spacing-5);
+  margin-top: var(--spacing-5);
+  background: var(--primary-container);
+  padding: var(--spacing-5);
+  border-radius: var(--radius-sm);
+
+  h5 {
+    margin: 0 0 var(--spacing-3) 0;
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  p {
+    margin: 0 0 var(--spacing-4) 0;
+    font-size: var(--fs-sm);
+    color: var(--text-weak);
+    line-height: 1.6;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+    
+    code {
+      background: var(--surface-3);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 0.9em;
+      color: var(--primary);
+      font-family: 'Courier New', monospace;
+    }
+  }
+}
+
+.polling-visual {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  padding: var(--spacing-4) 0;
+}
+
+.status-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-4);
+  border-radius: var(--radius-md);
+  transition: all 0.3s ease;
+
+  &[data-status="pending"] {
+    background: var(--surface-3);
+    .status-icon { color: var(--text-dim); }
+  }
+
+  &[data-status="processing"] {
+    background: var(--primary-container);
+    animation: pulse 2s ease-in-out infinite;
+    .status-icon { 
+      color: var(--primary);
+      animation: spin 2s linear infinite;
+    }
+  }
+
+  &[data-status="completed"] {
+    background: var(--success-container, rgba(76, 175, 80, 0.15));
+    .status-icon { color: var(--success, #4caf50); }
+  }
+
+  &[data-status="error"] {
+    background: var(--error-container, rgba(244, 67, 54, 0.15));
+    .status-icon { color: var(--error, #f44336); }
+  }
+
+  .status-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+  }
+
+  h3 {
+    margin: 0;
+    font-size: var(--fs-lg);
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+}
+
+.progress-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--fs-sm);
+  color: var(--text-weak);
+
+  .progress-text {
+    font-weight: 700;
+    color: var(--primary);
+    font-size: var(--fs-md);
+  }
+
+  .poll-count {
+    padding: var(--spacing-1) var(--spacing-2);
+    background: var(--surface-3);
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+  }
+}
+
+.message-box {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3);
+  background: var(--surface-3);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--primary);
+
+  mat-icon {
+    color: var(--primary);
+    flex-shrink: 0;
+  }
+
+  p {
+    margin: 0;
+    font-size: var(--fs-sm);
+    line-height: 1.5;
+  }
+}
+
+.code-preview {
+  margin-top: var(--spacing-3);
+  padding: var(--spacing-3);
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-weak);
+
+  code {
+    font-family: 'Courier New', monospace;
+    font-size: var(--fs-xs);
+    color: var(--text);
+    white-space: pre;
+    display: block;
+    line-height: 1.6;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

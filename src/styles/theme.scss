@@ -76,6 +76,14 @@ $cameron-profile-theme: mat.define-theme((
   --mat-select-focused-arrow-color: var(--accent);
   --mat-select-option-selected-state-label-text-color: var(--accent);
   --mat-select-option-label-text-color: var(--text);
+  
+  /* Form field fixes for light theme */
+  --mdc-filled-text-field-container-color: var(--surface-3);
+  --mdc-filled-text-field-hover-state-layer-color: rgba(0, 0, 0, 0.04);
+  --mdc-filled-text-field-hover-active-indicator-color: var(--text);
+  
+  --mdc-outlined-text-field-hover-outline-color: var(--text);
+  --mdc-outlined-text-field-hover-label-text-color: var(--text);
 }
 
 /* Optional: high-contrast focus ring for keyboard nav */

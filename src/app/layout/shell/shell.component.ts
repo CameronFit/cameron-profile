@@ -42,7 +42,7 @@ export class ShellComponent {
   private readonly router = inject(Router);
 
   // manual collapsed state (desktop only)
-  readonly collapsed = signal(false);
+  readonly collapsed = signal(true);
 
   // treat XSmall + Small as "mobile/tablet" for layout
   private readonly handsetQuery = toSignal(
@@ -65,24 +65,14 @@ export class ShellComponent {
   );
 
   constructor() {
-    // Collapse automatically when switching to mobile/tablet
-    effect(() => {
-      if (this.isMobile()) {
-        this.collapsed.set(true);
-      }
-    });
-
     // Auto-close on navigation when mobile/tablet
-    const navEnd = toSignal(
-      this.router.events.pipe(filter(e => e instanceof NavigationEnd))
-    );
-
-    effect(() => {
-      navEnd(); // track router changes
-      if (this.isMobile()) {
-        this.collapsed.set(true);
-      }
-    });
+    this.router.events
+      .pipe(filter(e => e instanceof NavigationEnd))
+      .subscribe(() => {
+        if (this.isMobile()) {
+          this.collapsed.set(true);
+        }
+      });
   }
 
   toggle = (): void => {
