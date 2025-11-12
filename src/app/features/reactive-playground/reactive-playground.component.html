@@ -7,8 +7,56 @@
   </div>
 </section>
 
-<section class="rp-grid">
-  <app-live-form-card></app-live-form-card>
-  <app-smart-search-card></app-smart-search-card>
-  <app-linked-dropdowns-card></app-linked-dropdowns-card>
+<section class="rp-container">
+  <!-- Mobile Navigation Hint -->
+  <div class="mobile-tab-hint">
+    <mat-icon>swipe</mat-icon>
+    <span>Swipe or tap tabs to explore different demos</span>
+  </div>
+
+  <mat-tab-group 
+    class="rp-tabs"
+    [(selectedIndex)]="activeTab"
+    animationDuration="300ms"
+    mat-stretch-tabs="false"
+    dynamicHeight
+  >
+    @for (tab of tabs; track tab.component) {
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <div class="tab-label">
+            <mat-icon class="tab-icon">{{ tab.icon }}</mat-icon>
+            <span class="tab-text">{{ tab.label }}</span>
+          </div>
+        </ng-template>
+        
+        <div class="tab-content">
+          <div class="tab-header">
+            <h2>{{ tab.label }}</h2>
+            <p>{{ tab.description }}</p>
+          </div>
+          
+          <div class="demo-container">
+            @switch (tab.component) {
+              @case ('live-form') {
+                <app-live-form-card></app-live-form-card>
+              }
+              @case ('smart-search') {
+                <app-smart-search-card></app-smart-search-card>
+              }
+              @case ('linked-dropdowns') {
+                <app-linked-dropdowns-card></app-linked-dropdowns-card>
+              }
+              @case ('api-polling') {
+                <app-api-polling-card></app-api-polling-card>
+              }
+              @case ('cache-strategy') {
+                <app-cache-strategy-card></app-cache-strategy-card>
+              }
+            }
+          </div>
+        </div>
+      </mat-tab>
+    }
+  </mat-tab-group>
 </section>

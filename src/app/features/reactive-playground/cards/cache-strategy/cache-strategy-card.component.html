@@ -1,0 +1,166 @@
+<mat-card class="demo-card">
+  <mat-card-header>
+    <mat-icon mat-card-avatar>account_circle</mat-icon>
+    <mat-card-title>State Management with Tap</mat-card-title>
+    <mat-card-subtitle>Using tap() operator to populate global state</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="action-buttons">
+      @if (!isAuthenticated()) {
+        <button 
+          mat-raised-button 
+          color="primary" 
+          (click)="login()"
+          [disabled]="isLoading()"
+        >
+          <mat-icon>login</mat-icon>
+          Login
+        </button>
+      } @else {
+        <button mat-raised-button (click)="fetchUserProfile()">
+          <mat-icon>refresh</mat-icon>
+          Fetch Profile
+        </button>
+        <button mat-raised-button (click)="refreshAccessToken()">
+          <mat-icon>vpn_key</mat-icon>
+          Refresh Token
+        </button>
+        <button mat-button color="warn" (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          Logout
+        </button>
+      }
+    </div>
+
+    <div class="state-overview">
+      <div class="auth-status" [class.authenticated]="isAuthenticated()">
+        <mat-icon>{{ isAuthenticated() ? 'lock_open' : 'lock' }}</mat-icon>
+        <span>{{ isAuthenticated() ? 'Authenticated' : 'Not Authenticated' }}</span>
+      </div>
+    </div>
+
+    <div class="state-grid">
+      <div class="state-card">
+        <h4><mat-icon>person</mat-icon> User</h4>
+        @if (state().user) {
+          <div class="state-value">
+            <strong>{{ state().user!.name }}</strong>
+            <span>{{ state().user!.email }}</span>
+            <span class="role-badge">{{ state().user!.role }}</span>
+          </div>
+        } @else {
+          <div class="state-empty">No user data</div>
+        }
+      </div>
+
+      <div class="state-card">
+        <h4><mat-icon>vpn_key</mat-icon> Access Token</h4>
+        @if (state().accessToken) {
+          <div class="state-value token">
+            <code>{{ state().accessToken!.substring(0, 20) }}...</code>
+          </div>
+        } @else {
+          <div class="state-empty">No token</div>
+        }
+      </div>
+
+      <div class="state-card">
+        <h4><mat-icon>security</mat-icon> Permissions</h4>
+        @if (state().permissions.length > 0) {
+          <div class="permissions-list">
+            @for (perm of state().permissions; track perm) {
+              <span class="permission-chip">{{ perm }}</span>
+            }
+          </div>
+        } @else {
+          <div class="state-empty">No permissions</div>
+        }
+      </div>
+
+      <div class="state-card">
+        <h4><mat-icon>schedule</mat-icon> Last Sync</h4>
+        @if (state().lastSync) {
+          <div class="state-value">
+            {{ state().lastSync | date:'short' }}
+          </div>
+        } @else {
+          <div class="state-empty">Never synced</div>
+        }
+      </div>
+    </div>
+
+    @if (apiCallLog().length > 0) {
+      <div class="api-log">
+        <div class="log-header">
+          <h4>API Call Log</h4>
+          <button mat-icon-button (click)="clearLog()">
+            <mat-icon>clear</mat-icon>
+          </button>
+        </div>
+        <div class="log-entries">
+          @for (log of apiCallLog().slice(-6); track log.timestamp) {
+            <div class="log-entry">
+              <div class="log-meta">
+                <strong>{{ log.action }}</strong>
+                <span class="log-time">{{ log.timestamp | date:'HH:mm:ss.SSS' }}</span>
+              </div>
+              @if (log.data && log.data !== 'undefined') {
+                <pre class="log-data">{{ log.data }}</pre>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <div class="code-preview">
+      <pre><code>// Service pattern with tap() operator
+login(credentials: Credentials): Observable&lt;User&gt; {{'{'}}{{'{'}}
+  return this.http
+    .post&lt;AuthResponse&gt;(
+      '/api/auth/login', 
+      credentials
+    )
+    .pipe(
+      tap(response => {{'{'}}{{'{'}}
+        // Populate global state
+        this.authState.user.set(
+          response.user
+        );
+        this.authState.token.set(
+          response.accessToken
+        );
+        this.authState.permissions.set(
+          response.permissions
+        );
+      {{'}'}}{{'}'}})
+    );
+      {{'}'}}{{'}'}}</code></pre>
+    </div>
+
+    <div class="rp-details">
+      <h5>What you see</h5>
+      <p>
+        Click "Login" to simulate authentication and watch user data, access tokens, and permissions 
+        populate in real-time across the state grid. The API Call Log shows each HTTP request 
+        and response as state updates happen.
+      </p>
+      
+      <h5>What's under the hood</h5>
+      <p>
+        The <code>tap()</code> operator intercepts HTTP responses within a service method, updating 
+        in-memory state via injection tokens (or signals) <strong>without requiring a subscription</strong>. 
+        The component calls <code>authService.login()</code> and subscribes once, while <code>tap()</code> 
+        populates the global auth state as a side effect. This pattern keeps state synchronized across 
+        the app without breaking the observable chain—perfect for auth flows, caching, and audit logging.
+      </p>
+    </div>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <span class="status-text">
+      Role: <strong>{{ userRole() }}</strong>
+    </span>
+  </mat-card-actions>
+</mat-card>

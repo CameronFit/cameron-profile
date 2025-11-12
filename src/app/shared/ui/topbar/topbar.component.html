@@ -1,6 +1,6 @@
 <mat-toolbar class="app-toolbar mat-elevation-z3">
-  <button mat-icon-button (click)="onToggle()" aria-label="Toggle navigation">
-    <mat-icon>{{ collapsed ? 'menu_open' : 'menu' }}</mat-icon>
+  <button mat-icon-button (click)="onToggle()" aria-label="Toggle navigation" class="menu-toggle">
+    <mat-icon class="menu-icon" [class.open]="!collapsed">{{ collapsed ? 'menu' : 'close' }}</mat-icon>
   </button>
 
   <app-theme-toggle></app-theme-toggle>
