@@ -78,10 +78,17 @@ export class ContactComponent {
   private initForm(): void {
     this.contactForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.email, this.emailValidator]],
       subject: ['', [Validators.required, Validators.minLength(5)]],
       message: ['', [Validators.required, Validators.minLength(10)]],
     });
+  }
+
+  private emailValidator(control: any) {
+    const email = control.value;
+    if (!email) return null;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(email) ? null : { invalidEmail: true };
   }
 
   onSubmit(): void {
@@ -96,7 +103,14 @@ export class ContactComponent {
       console.log('Form submitted:', this.contactForm.value);
       this.isSubmitting.set(false);
       this.submitSuccess.set(true);
+      
+      // Reset form and clear all validation states
       this.contactForm.reset();
+      Object.keys(this.contactForm.controls).forEach(key => {
+        this.contactForm.get(key)?.setErrors(null);
+        this.contactForm.get(key)?.markAsUntouched();
+        this.contactForm.get(key)?.markAsPristine();
+      });
 
       // Reset success message after 4 seconds
       setTimeout(() => {

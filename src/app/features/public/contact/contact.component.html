@@ -12,6 +12,11 @@
   <div class="contact-grid">
     <!-- Contact Form -->
     <div class="contact-form-section">
+      <div class="simulation-notice">
+        <mat-icon>info</mat-icon>
+        <span>Note: This is a demonstration form. No actual email will be sent.</span>
+      </div>
+      
       <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Name</mat-label>
@@ -57,7 +62,6 @@
           <span>Sending...</span>
           } @else {
           <ng-container>
-            <mat-icon>send</mat-icon>
             <span>Send Message</span>
           </ng-container>
           }

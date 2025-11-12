@@ -4,7 +4,7 @@
   display: block;
   color: var(--text);
   height: 100%;
-  background: var(--surface-bg); /* match main app background */
+  background: var(--sidenav-bg); /* match topbar */
 }
 
 // ============================================================================
@@ -42,7 +42,7 @@
   .profile-avatar {
     width: 112px;
     height: 112px;
-    border-radius: 50%;
+    border-radius: var(--radius-md);
     object-fit: cover;
     background: var(--surface-2);
     box-shadow: var(--shadow-2);

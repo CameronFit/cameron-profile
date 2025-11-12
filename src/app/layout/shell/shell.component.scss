@@ -36,12 +36,17 @@
   border-right: 1px solid var(--border-weak);
   box-shadow: var(--shadow-1);
   transition: all 0.3s ease;
+  border-radius: 0 !important; /* Remove rounded corners */
 
   @include media-breakpoint-down(sm) {
     box-shadow: var(--shadow-4);
     position: absolute;
     height: 100%;
     z-index: 4;
+  }
+  
+  ::ng-deep .mat-drawer-inner-container {
+    border-radius: 0 !important; /* Ensure inner container is also flat */
   }
 }
 
