@@ -33,15 +33,40 @@
   </mat-toolbar>
 
   <div class="viewer">
-    <!-- Use SAFE value in resource URL context -->
-    <object [attr.data]="safeUrl()" type="application/pdf" class="pdf-object">
-      <p>
-        Your browser can't display PDFs.
-        <a [href]="plainUrl()" target="_blank" rel="noopener"
-          >Open {{ currentDocLabel() }}</a
-        >
-        or use the Download button.
-      </p>
-    </object>
+    @if (isMobile()) {
+      <!-- Mobile: Direct link approach since many mobile browsers don't support embedded PDFs -->
+      <div class="mobile-pdf-fallback">
+        <mat-icon class="fallback-icon">description</mat-icon>
+        <h2>View {{ currentDocLabel() }}</h2>
+        <p>Mobile browsers may have limited PDF viewing support.</p>
+        <div class="fallback-actions">
+          <a mat-raised-button color="primary" [href]="plainUrl()" target="_blank" rel="noopener">
+            <mat-icon>open_in_new</mat-icon>
+            <span>Open in New Tab</span>
+          </a>
+          <a mat-stroked-button [href]="plainUrl()" download>
+            <mat-icon>download</mat-icon>
+            <span>Download PDF</span>
+          </a>
+        </div>
+      </div>
+    } @else {
+      <!-- Desktop: Use iframe for better compatibility -->
+      <iframe 
+        [src]="safeUrl()" 
+        type="application/pdf" 
+        class="pdf-viewer"
+        title="{{ currentDocLabel() }}">
+        <div class="desktop-fallback">
+          <p>
+            Your browser can't display PDFs.
+            <a [href]="plainUrl()" target="_blank" rel="noopener"
+              >Open {{ currentDocLabel() }}</a
+            >
+            or use the Download button.
+          </p>
+        </div>
+      </iframe>
+    }
   </div>
 </section>
